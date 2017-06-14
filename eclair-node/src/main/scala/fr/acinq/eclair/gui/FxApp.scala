@@ -76,11 +76,11 @@ class FxApp extends Application with Logging {
           case TCPBindException(port) =>
             notifyPreloader(new ErrorNotification("Setup", s"Could not bind to port $port", null))
           case BitcoinRPCConnectionException =>
-            notifyPreloader(new ErrorNotification("Setup", "Could not connect to Bitcoin Core using JSON-RPC.", null))
-            notifyPreloader(new AppNotification(InfoAppNotification, "Make sure that Bitcoin Core is up and running and RPC parameters are correct."))
+            notifyPreloader(new ErrorNotification("Setup", "Could not connect to Groestlcoin Core using JSON-RPC.", null))
+            notifyPreloader(new AppNotification(InfoAppNotification, "Make sure that Groestlcoin Core is up and running and RPC parameters are correct."))
           case BitcoinZMQConnectionTimeoutException =>
-            notifyPreloader(new ErrorNotification("Setup", "Could not connect to Bitcoin Core using ZMQ.", null))
-            notifyPreloader(new AppNotification(InfoAppNotification, "Make sure that Bitcoin Core is up and running and ZMQ parameters are correct."))
+            notifyPreloader(new ErrorNotification("Setup", "Could not connect to Groestlcoin Core using ZMQ.", null))
+            notifyPreloader(new AppNotification(InfoAppNotification, "Make sure that Groestlcoin Core is up and running and ZMQ parameters are correct."))
           case t: Throwable =>
             notifyPreloader(new ErrorNotification("Setup", s"Internal error: ${t.toString}", t))
         }

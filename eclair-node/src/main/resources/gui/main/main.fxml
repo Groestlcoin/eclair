@@ -161,7 +161,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" HBox.hgrow="SOMETIMES" minWidth="195.0">
                             <children>
-                                <Label text="Bitcoin-core" textAlignment="RIGHT" textOverrun="CLIP"/>
+                                <Label text="Groestlcoin-core" textAlignment="RIGHT" textOverrun="CLIP"/>
                                 <Label fx:id="bitcoinVersion" text="N/A" textOverrun="CLIP"/>
                                 <Label fx:id="bitcoinChain" styleClass="chain" text="(N/A)" textOverrun="CLIP"/>
                             </children>
@@ -212,8 +212,8 @@
                         </ImageView>
                         <VBox spacing="10.0" GridPane.columnIndex="1">
                             <children>
-                                <Label fx:id="message" styleClass="text-strong" text="Lost connection to Bitcoin Core..." wrapText="true" />
-                                <Label fx:id="details" text="Make sure that Bitcoin core is up and running." wrapText="true" />
+                                <Label fx:id="message" styleClass="text-strong" text="Lost connection to Groestlcoin Core..." wrapText="true" />
+                                <Label fx:id="details" text="Make sure that Groestlcoin core is up and running." wrapText="true" />
                             </children>
                         </VBox>
                     </children>
