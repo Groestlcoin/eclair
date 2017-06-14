@@ -12,21 +12,21 @@
     </modules>
 
     <description>A scala implementation of the Lightning Network</description>
-    <url>https://github.com/ACINQ/eclair</url>
+    <url>https://github.com/Groestlcoin/eclair</url>
     <name>${project.artifactId}</name>
 
     <licenses>
         <license>
-            <url>https://raw.githubusercontent.com/ACINQ/eclair/master/LICENSE</url>
+            <url>https://raw.githubusercontent.com/Groestlcoin/eclair/master/LICENSE</url>
             <name>Apache License</name>
             <distribution>repo</distribution>
         </license>
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:ACINQ/eclair.git</connection>
-        <developerConnection>scm:git:git@github.com:ACINQ/eclair.git</developerConnection>
-        <url>git@github.com:ACINQ/eclair.git</url>
+        <connection>scm:git:git@github.com:Groestlcoin/eclair.git</connection>
+        <developerConnection>scm:git:git@github.com:Groestlcoin/eclair.git</developerConnection>
+        <url>git@github.com:Groestlcoin/eclair.git</url>
     </scm>
 
     <developers>
