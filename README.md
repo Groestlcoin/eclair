@@ -27,9 +27,9 @@ Please see the latest [release note](https://github.com/ACINQ/eclair/releases) f
 
 :warning: **Those are valid for the most up-to-date, unreleased, version of eclair. Here are the [instructions for Eclair 0.2-alpha3](https://github.com/ACINQ/eclair/blob/v0.2-alpha3/README.md#installation)**.
 
-### Configuring Bitcoin Core
+### Configuring Groestlcoin Core
 
-Eclair needs a _synchronized_, _segwit-ready_, **_zeromq-enabled_**, _non-pruning_, _tx-indexing_ [Bitcoin Core](https://github.com/bitcoin/bitcoin) node. This means that on Windows you will need Bitcoin Core 0.14+.
+Eclair needs a _synchronized_, _segwit-ready_, **_zeromq-enabled_**, _non-pruning_, _tx-indexing_ [Groestlcoin Core](https://github.com/bitcoin/bitcoin) node. This means that on Windows you will need Groestlcoin Core 0.14+.
 
 Run bitcoind with the following minimal `bitcoin.conf`:
 ```
@@ -76,13 +76,13 @@ option         | description                     | default value
 
 To change your node configuration, edit the file `eclair.conf` in `datadir`.
 
-option                       | description               | default value
------------------------------|---------------------------|--------------
- eclair.server.port          | TCP port                  | 9735
- eclair.api.port             | HTTP port                 | 8080
- eclair.bitcoind.rpcuser     | Bitcoin Core RPC user     | foo
- eclair.bitcoind.rpcpassword | Bitcoin Core RPC password | bar
- eclair.bitcoind.zmq         | Bitcoin Core ZMQ address  | tcp://127.0.0.1:29000
+option                       | description                   | default value
+-----------------------------|-------------------------------|--------------
+ eclair.server.port          | TCP port                      | 9735
+ eclair.api.port             | HTTP port                     | 8080
+ eclair.bitcoind.rpcuser     | Groestlcoin Core RPC user     | foo
+ eclair.bitcoind.rpcpassword | Groestlcoin Core RPC password | bar
+ eclair.bitcoind.zmq         | Groestlcoin Core ZMQ address  | tcp://127.0.0.1:29000
 
 &rarr; see [`application.conf`](eclair-node/src/main/resources/application.conf) for full reference.
 
