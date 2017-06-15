@@ -39,5 +39,5 @@ object PaymentRequest extends Logging {
 
 case class PaymentRequest(nodeId: BinaryData, amount: MilliSatoshi, paymentHash: BinaryData) {
   require(amount.amount > 0 && amount.amount < PaymentRequest.maxAmountMsat,
-    f"amount is not valid: must be > 0 and < ${PaymentRequest.maxAmountMsat}%,d msat (~${PaymentRequest.maxAmountMsat / 1e11}%.3f BTC)")
+    f"amount is not valid: must be > 0 and < ${PaymentRequest.maxAmountMsat}%,d msat (~${PaymentRequest.maxAmountMsat / 1e11}%.3f GRS)")
 }

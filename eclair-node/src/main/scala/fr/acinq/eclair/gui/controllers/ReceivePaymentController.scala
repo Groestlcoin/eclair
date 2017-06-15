@@ -30,7 +30,7 @@ class ReceivePaymentController(val handlers: Handlers, val stage: Stage, val set
   @FXML def initialize = unit.setValue(unit.getItems.get(0))
 
   @FXML def handleGenerate(event: ActionEvent) = {
-    if ((("milliBTC".equals(unit.getValue) || "Satoshi".equals(unit.getValue))
+    if ((("milliGRS".equals(unit.getValue) || "Satoshi".equals(unit.getValue))
           && GUIValidators.validate(amount.getText, amountError, "Amount must be numeric", GUIValidators.amountDecRegex))
       || ("milliSatoshi".equals(unit.getValue) && GUIValidators.validate(amount.getText, amountError, "Amount must be numeric (no decimal msat)", GUIValidators.amountRegex))) {
         try {
@@ -45,12 +45,12 @@ class ReceivePaymentController(val handlers: Handlers, val stage: Stage, val set
               throw new NumberFormatException("incorrect amount")
           }
           val smartAmount = unit.getValue match {
-            case "milliBTC" => MilliSatoshi(parsedInt.toLong * 100000000L + amountDec.toLong * 100000L)
+            case "milliGRS" => MilliSatoshi(parsedInt.toLong * 100000000L + amountDec.toLong * 100000L)
             case "Satoshi" => MilliSatoshi(parsedInt.toLong * 1000L + amountDec.toLong)
             case "milliSatoshi" => MilliSatoshi(amount.getText.toLong)
           }
           if (GUIValidators.validate(amountError, "Amount must be greater than 0", smartAmount.amount > 0)
-            && GUIValidators.validate(amountError, f"Amount must be less than ${PaymentRequest.maxAmountMsat}%,d msat (~${PaymentRequest.maxAmountMsat / 1e11}%.3f BTC)", smartAmount.amount < PaymentRequest.maxAmountMsat)) {
+            && GUIValidators.validate(amountError, f"Amount must be less than ${PaymentRequest.maxAmountMsat}%,d msat (~${PaymentRequest.maxAmountMsat / 1e11}%.3f GRS)", smartAmount.amount < PaymentRequest.maxAmountMsat)) {
             import scala.concurrent.ExecutionContext.Implicits.global
             handlers.receive(smartAmount) onComplete {
               case Success(s) => Platform.runLater(new Runnable {
