@@ -40,7 +40,7 @@ class BitcoinJsonRPCClient(user: String, password: String, host: String = "127.0
         case JsonRPCResponse(_, Some(error), _) => throw JsonRPCError(error)
         case o => o
       } recover {
-        case t: Throwable if httpRes.status == StatusCodes.Unauthorized => throw new RuntimeException("bitcoind replied with 401/Unauthorized (bad user/password?)", t)
+        case t: Throwable if httpRes.status == StatusCodes.Unauthorized => throw new RuntimeException("groestlcoind replied with 401/Unauthorized (bad user/password?)", t)
       }
     } yield jsonRpcRes.result
 
@@ -52,7 +52,7 @@ class BitcoinJsonRPCClient(user: String, password: String, host: String = "127.0
         //case JsonRPCResponse(_, Some(error), _) => throw JsonRPCError(error)
         case o => o
       } recover {
-        case t: Throwable if httpRes.status == StatusCodes.Unauthorized => throw new RuntimeException("bitcoind replied with 401/Unauthorized (bad user/password?)", t)
+        case t: Throwable if httpRes.status == StatusCodes.Unauthorized => throw new RuntimeException("groestlcoind replied with 401/Unauthorized (bad user/password?)", t)
       }
     } yield jsonRpcRes.map(_.result)
 

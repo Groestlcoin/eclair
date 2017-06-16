@@ -88,7 +88,7 @@ class Setup(datadir: String, actorSystemName: String = "default") extends Loggin
   }
   val nodeParams = NodeParams.makeNodeParams(new File(datadir), config, chainHash)
   logger.info(s"nodeid=${nodeParams.privateKey.publicKey.toBin} alias=${nodeParams.alias}")
-  assert(progress > 0.99, "bitcoind should be synchronized")
+  assert(progress > 0.99, "groestlcoind should be synchronized")
 
   Globals.blockCount.set(blockCount)
   val defaultFeeratePerKw = config.getLong("default-feerate-perkw")
@@ -169,6 +169,6 @@ object LogSetup {
 
 case class TCPBindException(port: Int) extends RuntimeException
 
-case object BitcoinZMQConnectionTimeoutException extends RuntimeException("could not connect to bitcoind using zeromq")
+case object BitcoinZMQConnectionTimeoutException extends RuntimeException("could not connect to groestlcoind using zeromq")
 
-case object BitcoinRPCConnectionException extends RuntimeException("could not connect to bitcoind using json-rpc")
+case object BitcoinRPCConnectionException extends RuntimeException("could not connect to groestlcoind using json-rpc")
