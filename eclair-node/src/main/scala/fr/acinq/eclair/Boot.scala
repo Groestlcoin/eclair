@@ -84,6 +84,7 @@ class Setup(datadir: String, actorSystemName: String = "default") extends Loggin
   val chainHash = chain match {
     case "test" => Block.TestnetGenesisBlock.blockId
     case "regtest" => Block.RegtestGenesisBlock.blockId
+    case "main" => Block.LivenetGenesisBlock.blockId
     case _ => throw new RuntimeException("only regtest and testnet are supported for now")
   }
   val nodeParams = NodeParams.makeNodeParams(new File(datadir), config, chainHash)
