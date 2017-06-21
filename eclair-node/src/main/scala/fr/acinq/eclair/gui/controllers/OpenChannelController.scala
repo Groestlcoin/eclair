@@ -64,11 +64,11 @@ class OpenChannelController(val handlers: Handlers, val stage: Stage, val setup:
             case "Satoshi" => Satoshi(rawFunding)
             case "milliSatoshi" => Satoshi(rawFunding / 1000L)
           }
-          if (GUIValidators.validate(fundingSatoshisError, "Funding must be 16 777 216 satoshis (~0.167 GRS) or less", smartFunding.toLong < maxFunding)) {
+          if (GUIValidators.validate(fundingSatoshisError, "Funding must be 1 677 721 600 000 000 satoshis (~16 700 GRS) or less", smartFunding.toLong < maxFunding)) {
             if (!pushMsat.getText.isEmpty) {
               // pushMsat is optional, so we validate field only if it isn't empty
               if (GUIValidators.validate(pushMsat.getText, pushMsatError, "Push msat must be numeric", GUIValidators.amountRegex)
-                && GUIValidators.validate(pushMsatError, "Push msat must be 16 777 216 000 msat (~0.167 GRS) or less", pushMsat.getText.toLong <= maxPushMsat)) {
+                && GUIValidators.validate(pushMsatError, "Push msat must be 1 677 721 600 000 000 msat (~16 700 GRS) or less", pushMsat.getText.toLong <= maxPushMsat)) {
                 handlers.open(host.getText, Some(NewChannel(smartFunding, MilliSatoshi(pushMsat.getText.toLong))))
                 stage.close
               }

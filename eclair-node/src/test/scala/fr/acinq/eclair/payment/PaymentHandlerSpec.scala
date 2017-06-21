@@ -49,12 +49,12 @@ class PaymentHandlerSpec extends TestKit(ActorSystem("test")) with FunSuiteLike 
     val zeroError = sender.expectMsgType[Failure]
     assert(zeroError.cause.getMessage.contains("amount is not valid"))
 
-    // large amount should fail (> 42.95 mBTC)
+    // large amount should fail (> 429 500 GRS)
     sender.send(handler, ReceivePayment(MilliSatoshi(PaymentRequest.maxAmountMsat + 10)))
     val largeAmountError = sender.expectMsgType[Failure]
     assert(largeAmountError.cause.getMessage.contains("amount is not valid"))
 
-    // success with 1 mBTC
+    // success with 1 mGRS
     sender.send(handler, ReceivePayment(MilliSatoshi(100000000L)))
     val pr = sender.expectMsgType[PaymentRequest]
     assert(pr.amount.amount == 100000000L
