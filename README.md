@@ -12,7 +12,7 @@ This software follows the [Lightning Network Specifications (BOLTs)](https://git
  
  :construction: Both the BOLTs and Eclair itself are a work in progress. Expect things to break/change!
  
- :warning: Eclair currently only runs on regtest or testnet. We recommend testing in regtest, as it allows you to generate blocks manually and not wait for confirmations.
+ :warning: Eclair currently runs on regtest, testnet and mainnet. We recommend testing in regtest, as it allows you to generate blocks manually and not wait for confirmations.
 
 ---
 
@@ -29,17 +29,17 @@ Please see the latest [release note](https://github.com/ACINQ/eclair/releases) f
 
 ### Configuring Groestlcoin Core
 
-Eclair needs a _synchronized_, _segwit-ready_, **_zeromq-enabled_**, _non-pruning_, _tx-indexing_ [Groestlcoin Core](https://github.com/bitcoin/bitcoin) node. This means that on Windows you will need Groestlcoin Core 0.14+.
+Eclair needs a _synchronized_, _segwit-ready_, **_zeromq-enabled_**, _non-pruning_, _tx-indexing_ [Groestlcoin Core](https://github.com/groestlcoin/groestlcoin) node. This means that on Windows you will need Groestlcoin Core 2.16.0
 
-Run bitcoind with the following minimal `bitcoin.conf`:
+Run groestlcoind with the following minimal `groestlcoin.conf`:
 ```
 regtest=1
 server=1
 rpcuser=XXX
 rpcpassword=XXX
 txindex=1
-zmqpubrawblock=tcp://127.0.0.1:29000
-zmqpubrawtx=tcp://127.0.0.1:29000
+zmqpubrawblock=tcp://127.0.0.1:21441
+zmqpubrawtx=tcp://127.0.0.1:21441
 ```
 
 ### Installing Eclair
@@ -82,7 +82,7 @@ option                       | description                   | default value
  eclair.api.port             | HTTP port                     | 8080
  eclair.bitcoind.rpcuser     | Groestlcoin Core RPC user     | foo
  eclair.bitcoind.rpcpassword | Groestlcoin Core RPC password | bar
- eclair.bitcoind.zmq         | Groestlcoin Core ZMQ address  | tcp://127.0.0.1:29000
+ eclair.bitcoind.zmq         | Groestlcoin Core ZMQ address  | tcp://127.0.0.1:21441
 
 &rarr; see [`application.conf`](eclair-node/src/main/resources/application.conf) for full reference.
 
