@@ -1,14 +1,27 @@
 sudo: required
+services:
+  -docker
 dist: trusty
 language: scala
 scala:
- - 2.11.8
+ - 2.11.12
 env:
  - export LD_LIBRARY_PATH=/usr/local/lib
+before_install:
+ - wget http://apache.crihan.fr/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip
+ - unzip -qq apache-maven-3.6.0-bin.zip
+ - export M2_HOME=$PWD/apache-maven-3.6.0
+ - export PATH=$M2_HOME/bin:$PATH
 script:
- - mvn install
+ - mvn scoverage:report
+cache:
+ directories:
+  - .autoconf
+  - $HOME/.m2
 jdk:
- - oraclejdk8
+ - openjdk11
 notifications:
  email:
   - ops@acinq.fr
+after_success:
+ - bash <(curl -s https://codecov.io/bash)
