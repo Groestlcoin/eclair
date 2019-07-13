@@ -15,7 +15,7 @@ This software follows the [Lightning Network Specifications (BOLTs)](https://git
  
  :rotating_light: If you run Eclair on mainnet (which is the default setting):
  - Keep in mind that it is beta-quality software and **don't put too much money** in it
- - Eclair's JSON API should **NOT** be accessible from the outside world (similarly to Bitcoin Core API)
+ - Eclair's JSON API should **NOT** be accessible from the outside world (similarly to Groestlcoin Core API)
  
 ---
 
@@ -39,7 +39,7 @@ For more information please visit the [API documentation website](https://acinq.
 :warning: Eclair requires Groestlcoin Core 2.17.1 or higher. If you are upgrading an existing wallet, you need to create a new address and send all your funds to that address.
 
 Eclair needs a _synchronized_, _segwit-ready_, **_zeromq-enabled_**, _wallet-enabled_, _non-pruning_, _tx-indexing_ [Groestlcoin Core](https://github.com/groestlcoin/groestlcoin) node. 
-Eclair will use any BTC it finds in the Bitcoin Core wallet to fund any channels you choose to open. Eclair will return BTC from closed channels to this wallet.
+Eclair will use any GRS it finds in the Groestlcoin Core wallet to fund any channels you choose to open. Eclair will return GRS from closed channels to this wallet.
 You can configure your Bitcoin Node to use either `p2sh-segwit` addresses or `bech32` addresses, Eclair is compatible with both modes.
 
 Run groestlcoind with the following minimal `groestlcoin.conf`:
@@ -92,10 +92,10 @@ name                         | description                                      
  eclair.api.enabled          | Enable/disable the API                                                                | false. By default the API is disabled. If you want to enable it, you must set a password.
  eclair.api.port             | API HTTP port                                                                         | 8080
  eclair.api.password         | API password (BASIC)                                                                  | "" (must be set if the API is enabled)
- eclair.bitcoind.rpcuser     | Bitcoin Core RPC user                                                                 | foo
- eclair.bitcoind.rpcpassword | Bitcoin Core RPC password                                                             | bar
- eclair.bitcoind.zmqblock    | Bitcoin Core ZMQ block address                                                        | "tcp://127.0.0.1:29000"
- eclair.bitcoind.zmqtx       | Bitcoin Core ZMQ tx address                                                           | "tcp://127.0.0.1:29000"
+ eclair.bitcoind.rpcuser     | Groestlcoin Core RPC user                                                                 | foo
+ eclair.bitcoind.rpcpassword | Groestlcoin Core RPC password                                                             | bar
+ eclair.bitcoind.zmqblock    | Groestlcoin Core ZMQ block address                                                        | "tcp://127.0.0.1:29000"
+ eclair.bitcoind.zmqtx       | Groestlcoin Core ZMQ tx address                                                           | "tcp://127.0.0.1:29000"
  eclair.gui.unit             | Unit in which amounts are displayed (possible values: msat, sat, bits, mbtc, btc)     | btc
 
 Quotes are not required unless the value contains special characters. Full syntax guide [here](https://github.com/lightbend/config/blob/master/HOCON.md).
@@ -186,7 +186,7 @@ Eclair is configured to run on mainnet by default, but you can still run it on t
 
 ```
 eclair.chain=testnet
-eclair.bitcoind.rpcport=18332
+eclair.bitcoind.rpcport=17766
 ```
 
 You may also want to take advantage of the new configuration sections in `bitcoin.conf` to manage parameters that are network specific, 
