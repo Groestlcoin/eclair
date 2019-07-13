@@ -162,8 +162,8 @@
         </dependency>
         <!-- BITCOIN -->
         <dependency>
-            <groupId>fr.acinq</groupId>
-            <artifactId>bitcoin-lib_${scala.version.short}</artifactId>
+            <groupId>org.groestlcoin</groupId>
+            <artifactId>groestlcoin-lib_${scala.version.short}</artifactId>
             <version>${bitcoinlib.version}</version>
             <exclusions>
                 <exclusion>
