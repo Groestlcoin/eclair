@@ -81,8 +81,8 @@
             <properties>
                 <bitcoind.url>https://github.com/Groestlcoin/groestlcoin/releases/download/v2.17.2/groestlcoin-2.17.2-x86_64-linux-gnu.tar.gz
                 </bitcoind.url>
-                <bitcoind.md5>6647B099D94A2DBDC0E967E7C2FCF136</bitcoind.md5>
-                <bitcoind.sha1>F26CFA22C15FA452CC5389CD2BE3B4348A8B7514</bitcoind.sha1>
+                <bitcoind.md5>6647b099d94a2dbdc0e967e7c2fcf136</bitcoind.md5>
+                <bitcoind.sha1>f26cfa22c15fa452cc5389cd2be3b4348a8b7514</bitcoind.sha1>
             </properties>
         </profile>
         <profile>
@@ -95,8 +95,8 @@
             <properties>
                 <bitcoind.url>https://github.com/Groestlcoin/groestlcoin/releases/download/v2.17.2/groestlcoin-2.17.2-x86_64-apple-darwin14.tar.gz
                 </bitcoind.url>
-                <bitcoind.md5>D958801FD80DD9207B66C7AEDA162C36</bitcoind.md5>
-                <bitcoind.sha1>73246F96E5D9C86B87ADBA42EC2D4997B8D45CE9</bitcoind.sha1>
+                <bitcoind.md5>d958801fd80dd9207b66c7aeda162c36</bitcoind.md5>
+                <bitcoind.sha1>73246f96e5d9c86b87adba42ec2d4997b8d45ce9</bitcoind.sha1>
             </properties>
         </profile>
         <profile>
@@ -108,8 +108,8 @@
             </activation>
             <properties>
                 <bitcoind.url>https://github.com/Groestlcoin/groestlcoin/releases/download/v2.17.2/groestlcoin-2.17.2-x86_64-w64-mingw32.zip</bitcoind.url>
-                <bitcoind.md5>0FBA7DE2806CC4F9FFE9BE840B850088</bitcoind.md5>
-                <bitcoind.sha1>EE8BC93CCAE007B3D5FB8D1F29D711891378F2DE</bitcoind.sha1>
+                <bitcoind.md5>0fba7de2806cc4f9ffe9be840b850088</bitcoind.md5>
+                <bitcoind.sha1>ee8bc93ccae007b3d5fb8d1f29d711891378f2de</bitcoind.sha1>
             </properties>
         </profile>
     </profiles>
