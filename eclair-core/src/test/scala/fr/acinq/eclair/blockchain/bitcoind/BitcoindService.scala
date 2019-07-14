@@ -44,8 +44,8 @@ trait BitcoindService extends Logging {
   val INTEGRATION_TMP_DIR = new File(TestUtils.BUILD_DIRECTORY, s"integration-${UUID.randomUUID()}")
   logger.info(s"using tmp dir: $INTEGRATION_TMP_DIR")
 
-  val PATH_BITCOIND = new File(TestUtils.BUILD_DIRECTORY, "bitcoin-0.17.1/bin/bitcoind")
-  val PATH_BITCOIND_DATADIR = new File(INTEGRATION_TMP_DIR, "datadir-bitcoin")
+  val PATH_BITCOIND = new File(TestUtils.BUILD_DIRECTORY, "groestlcoin-2.17.2/bin/groestlcoind")
+  val PATH_BITCOIND_DATADIR = new File(INTEGRATION_TMP_DIR, "datadir-groestlcoin")
 
   var bitcoind: Process = null
   var bitcoinrpcclient: BitcoinJsonRPCClient = null
@@ -55,12 +55,12 @@ trait BitcoindService extends Logging {
 
   def startBitcoind(): Unit = {
     Files.createDirectories(PATH_BITCOIND_DATADIR.toPath)
-    if (!Files.exists(new File(PATH_BITCOIND_DATADIR.toString, "bitcoin.conf").toPath)) {
-      Files.copy(classOf[IntegrationSpec].getResourceAsStream("/integration/bitcoin.conf"), new File(PATH_BITCOIND_DATADIR.toString, "bitcoin.conf").toPath, StandardCopyOption.REPLACE_EXISTING)
+    if (!Files.exists(new File(PATH_BITCOIND_DATADIR.toString, "groestlcoin.conf").toPath)) {
+      Files.copy(classOf[IntegrationSpec].getResourceAsStream("/integration/groestlcoin.conf"), new File(PATH_BITCOIND_DATADIR.toString, "groestlcoin.conf").toPath, StandardCopyOption.REPLACE_EXISTING)
     }
 
     bitcoind = s"$PATH_BITCOIND -datadir=$PATH_BITCOIND_DATADIR".run()
-    bitcoinrpcclient = new BasicBitcoinJsonRPCClient(user = "foo", password = "bar", host = "localhost", port = 28332)
+    bitcoinrpcclient = new BasicBitcoinJsonRPCClient(user = "foo", password = "bar", host = "localhost", port = 21441)
     bitcoincli = system.actorOf(Props(new Actor {
       override def receive: Receive = {
         case BitcoinReq(method) => bitcoinrpcclient.invoke(method) pipeTo sender
@@ -80,7 +80,7 @@ trait BitcoindService extends Logging {
 
   def waitForBitcoindReady(): Unit = {
     val sender = TestProbe()
-    logger.info(s"waiting for bitcoind to initialize...")
+    logger.info(s"waiting for groestlcoind to initialize...")
     awaitCond({
       sender.send(bitcoincli, BitcoinReq("getnetworkinfo"))
       sender.receiveOne(5 second).isInstanceOf[JValue]

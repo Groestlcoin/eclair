@@ -45,8 +45,8 @@ class BitcoinCoreWalletSpec extends TestKit(ActorSystem("test")) with BitcoindSe
     "eclair.chain" -> "regtest",
     "eclair.spv" -> false,
     "eclair.server.public-ips.1" -> "localhost",
-    "eclair.bitcoind.port" -> 28333,
-    "eclair.bitcoind.rpcport" -> 28332,
+    "eclair.bitcoind.port" -> 21331,
+    "eclair.bitcoind.rpcport" -> 21441,
     "eclair.router-broadcast-interval" -> "2 second",
     "eclair.auto-reconnect" -> false))
   val config = ConfigFactory.load(commonConfig).getConfig("eclair")
@@ -63,7 +63,7 @@ class BitcoinCoreWalletSpec extends TestKit(ActorSystem("test")) with BitcoindSe
     stopBitcoind()
   }
 
-  test("wait bitcoind ready") {
+  test("wait groestlcoind ready") {
     waitForBitcoindReady()
   }
 
@@ -181,7 +181,7 @@ class BitcoinCoreWalletSpec extends TestKit(ActorSystem("test")) with BitcoindSe
     sender.send(bitcoincli, BitcoinReq("getrawtransaction", fundingTxes(2).txid.toString()))
     assert(sender.expectMsgType[JString](10 seconds).s === fundingTxes(2).toString())
 
-    // NB: from 0.17.0 on bitcoin core will clear locks when a tx is published
+    // NB: from 2.17.2 on Groestlcoin core will clear locks when a tx is published
     sender.send(bitcoincli, BitcoinReq("listlockunspent"))
     assert(sender.expectMsgType[JValue](10 seconds).children.size === 0)
   }

@@ -15,7 +15,7 @@ brew install tor
 ```
 
 #### Windows:
-  
+
 [Download the "Expert Bundle"](https://www.torproject.org/download/download.html) from Tor's website and extract it to `C:\tor`.
 
 ### Configuring Tor
@@ -91,7 +91,7 @@ You can see what onion address is assigned using `eclair-cli`:
 ```shell
 eclair-cli getinfo
 ```
-Eclair saves the Tor endpoint's private key in `~/.eclair/tor_pk`, so that it can recreate the endpoint address after 
+Eclair saves the Tor endpoint's private key in `~/.eclair/tor_pk`, so that it can recreate the endpoint address after
 restart. If you remove the private key eclair will regenerate the endpoint address.   
 
 There are two possible values for `protocol-version`:
@@ -104,9 +104,9 @@ value   | description
 --------|---------------------------------------------------------
  v2     | set up a Tor hidden service version 2 end point
  v3     | set up a Tor hidden service version 3 end point (default)
- 
-Tor protocol v3 (supported by Tor version 0.3.3.6 and higher) is backwards compatible and supports 
-both v2 and v3 addresses. 
+
+Tor protocol v3 (supported by Tor version 0.3.3.6 and higher) is backwards compatible and supports
+both v2 and v3 addresses.
 
 For increased privacy do not advertise your IP address in the `server.public-ips` list, and set your binding IP to `localhost`:
 ```
@@ -115,7 +115,7 @@ eclair.server.binding-ip = "127.0.0.1"
 
 ### Configure SOCKS5 proxy
 
-By default all incoming connections will be established via Tor network, but all outgoing will be created via the 
+By default all incoming connections will be established via Tor network, but all outgoing will be created via the
 clearnet. To route them through Tor you can use Tor's SOCKS5 proxy. Add this line in your `eclair.conf`:
 ```
 eclair.socks5.enabled = true
@@ -129,7 +129,7 @@ To create a new Tor circuit for every connection, use `randomize-credentials` pa
 eclair.socks5.randomize-credentials = true
 ```
 
-:warning: Tor hidden service and SOCKS5 are independent options. You can use just one of them, but if you want to get the most privacy 
+:warning: Tor hidden service and SOCKS5 are independent options. You can use just one of them, but if you want to get the most privacy
 features from using Tor use both.  
 
-Note, that bitcoind should be configured to use Tor as well (https://en.bitcoin.it/wiki/Setting_up_a_Tor_hidden_service).
+Note, that groestlcoind should be configured to use Tor as well (https://en.bitcoin.it/wiki/Setting_up_a_Tor_hidden_service).

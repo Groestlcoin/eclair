@@ -121,7 +121,7 @@ class Setup(datadir: File,
       implicit val formats = org.json4s.DefaultFormats
       val future = for {
         json <- bitcoinClient.invoke("getblockchaininfo").recover { case _ => throw BitcoinRPCConnectionException }
-        // Make sure wallet support is enabled in bitcoind.
+        // Make sure wallet support is enabled in groestlcoind.
         _ <- bitcoinClient.invoke("getbalance").recover { case _ => throw BitcoinWalletDisabledException }
         progress = (json \ "verificationprogress").extract[Double]
         ibd = (json \ "initialblockdownload").extract[Boolean]
@@ -136,15 +136,15 @@ class Setup(datadir: File,
         }
       } yield (progress, ibd, chainHash, bitcoinVersion, unspentAddresses, blocks, headers)
       // blocking sanity checks
-      val (progress, initialBlockDownload, chainHash, bitcoinVersion, unspentAddresses, blocks, headers) = await(future, 30 seconds, "bicoind did not respond after 30 seconds")
-      assert(bitcoinVersion >= 170000, "Eclair requires Groestlcoin Core 2.17.0 or higher")
+      val (progress, initialBlockDownload, chainHash, bitcoinVersion, unspentAddresses, blocks, headers) = await(future, 30 seconds, "groestlcoind did not respond after 30 seconds")
+      assert(bitcoinVersion >= 2172000, "Eclair requires Groestlcoin Core 2.17.2 or higher")
       assert(chainHash == nodeParams.chainHash, s"chainHash mismatch (conf=${nodeParams.chainHash} != bitcoind=$chainHash)")
       if (chainHash != Block.RegtestGenesisBlock.hash) {
         assert(unspentAddresses.forall(address => !isPay2PubkeyHash(address)), "Make sure that all your UTXOS are segwit UTXOS and not p2pkh (check out our README for more details)")
       }
-      assert(!initialBlockDownload, s"bitcoind should be synchronized (initialblockdownload=$initialBlockDownload)")
-      assert(progress > 0.999, s"bitcoind should be synchronized (progress=$progress)")
-      assert(headers - blocks <= 1, s"bitcoind should be synchronized (headers=$headers blocks=$blocks)")
+      assert(!initialBlockDownload, s"groestlcoind should be synchronized (initialblockdownload=$initialBlockDownload)")
+      assert(progress > 0.999, s"groestlcoind should be synchronized (progress=$progress)")
+      assert(headers - blocks <= 1, s"groestlcoind should be synchronized (headers=$headers blocks=$blocks)")
       Bitcoind(bitcoinClient)
     case ELECTRUM =>
       val addresses = config.hasPath("electrum") match {
@@ -364,11 +364,11 @@ case class Kit(nodeParams: NodeParams,
                server: ActorRef,
                wallet: EclairWallet)
 
-case object BitcoinZMQConnectionTimeoutException extends RuntimeException("could not connect to bitcoind using zeromq")
+case object BitcoinZMQConnectionTimeoutException extends RuntimeException("could not connect to groestlcoind using zeromq")
 
-case object BitcoinRPCConnectionException extends RuntimeException("could not connect to bitcoind using json-rpc")
+case object BitcoinRPCConnectionException extends RuntimeException("could not connect to groestlcoind using json-rpc")
 
-case object BitcoinWalletDisabledException extends RuntimeException("bitcoind must have wallet support enabled")
+case object BitcoinWalletDisabledException extends RuntimeException("groestlcoind must have wallet support enabled")
 
 case object EmptyAPIPasswordException extends RuntimeException("must set a password for the json-rpc api")
 

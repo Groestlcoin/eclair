@@ -108,10 +108,10 @@ class BitcoinCoreWallet(rpcClient: BitcoinJsonRPCClient)(implicit ec: ExecutionC
   }
 
   override def commit(tx: Transaction): Future[Boolean] = publishTransaction(tx)
-    .map(_ => true) // if bitcoind says OK, then we consider the tx successfully published
+    .map(_ => true) // if groestlcoind says OK, then we consider the tx successfully published
     .recoverWith { case JsonRPCError(e) =>
     logger.warn(s"txid=${tx.txid} error=$e")
-    getTransaction(tx.txid).map(_ => true).recover { case _ => false } // if we get a parseable error from bitcoind AND the tx is NOT in the mempool/blockchain, then we consider that the tx was not published
+    getTransaction(tx.txid).map(_ => true).recover { case _ => false } // if we get a parseable error from groestlcoind AND the tx is NOT in the mempool/blockchain, then we consider that the tx was not published
   }
     .recover { case _ => true } // in all other cases we consider that the tx has been published
 
@@ -123,8 +123,8 @@ class BitcoinCoreWallet(rpcClient: BitcoinJsonRPCClient)(implicit ec: ExecutionC
       .map(_ => true) // we have found the transaction
       .recover {
       case JsonRPCError(Error(_, message)) if message.contains("indexing") =>
-        sys.error("Fatal error: bitcoind is indexing!!")
-        System.exit(1) // bitcoind is indexing, that's a fatal error!!
+        sys.error("Fatal error: groestlcoind is indexing!!")
+        System.exit(1) // groestlcoind is indexing, that's a fatal error!!
         false // won't be reached
       case _ => false
     }

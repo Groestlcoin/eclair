@@ -47,7 +47,7 @@ class AnnouncementsBatchValidationSpec extends FunSuite {
 
     implicit val system = ActorSystem()
     implicit val sttpBackend  = OkHttpFutureBackend()
-    implicit val extendedBitcoinClient = new ExtendedBitcoinClient(new BasicBitcoinJsonRPCClient(user = "foo", password = "bar", host = "localhost", port = 18332))
+    implicit val extendedBitcoinClient = new ExtendedBitcoinClient(new BasicBitcoinJsonRPCClient(user = "foo", password = "bar", host = "localhost", port = 17766))
 
     val channels = for (i <- 0 until 50) yield {
       // let's generate a block every 10 txs so that we can compute short ids

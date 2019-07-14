@@ -79,10 +79,10 @@ class IntegrationSpec extends TestKit(ActorSystem("test")) with BitcoindService 
   val commonConfig = ConfigFactory.parseMap(Map(
     "eclair.chain" -> "regtest",
     "eclair.server.public-ips.1" -> "127.0.0.1",
-    "eclair.bitcoind.port" -> 28333,
-    "eclair.bitcoind.rpcport" -> 28332,
-    "eclair.bitcoind.zmqblock" -> "tcp://127.0.0.1:28334",
-    "eclair.bitcoind.zmqtx" -> "tcp://127.0.0.1:28335",
+    "eclair.bitcoind.port" -> 21331,
+    "eclair.bitcoind.rpcport" -> 21441,
+    "eclair.bitcoind.zmqblock" -> "tcp://127.0.0.1:21444",
+    "eclair.bitcoind.zmqtx" -> "tcp://127.0.0.1:21445",
     "eclair.mindepth-blocks" -> 2,
     "eclair.max-htlc-value-in-flight-msat" -> 100000000000L,
     "eclair.router.broadcast-interval" -> "2 second",
@@ -96,8 +96,8 @@ class IntegrationSpec extends TestKit(ActorSystem("test")) with BitcoindService 
   }
 
   override def afterAll(): Unit = {
-    // gracefully stopping bitcoin will make it store its state cleanly to disk, which is good for later debugging
-    logger.info(s"stopping bitcoind")
+    // gracefully stopping groestlcoin will make it store its state cleanly to disk, which is good for later debugging
+    logger.info(s"stopping groestlcoind")
     stopBitcoind()
     nodes.foreach {
       case (name, setup) =>
@@ -106,9 +106,9 @@ class IntegrationSpec extends TestKit(ActorSystem("test")) with BitcoindService 
     }
   }
 
-  test("wait bitcoind ready") {
+  test("wait groestlcoind ready") {
     val sender = TestProbe()
-    logger.info(s"waiting for bitcoind to initialize...")
+    logger.info(s"waiting for groestlcoind to initialize...")
     awaitCond({
       sender.send(bitcoincli, BitcoinReq("getnetworkinfo"))
       sender.receiveOne(5 second).isInstanceOf[JValue]
