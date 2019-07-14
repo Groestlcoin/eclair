@@ -58,36 +58,36 @@ sealed trait CoinUnit {
 
 case object MSatUnit extends CoinUnit {
   override def code: String = "msat"
-  override def shortLabel: String = "mSat"
-  override def label: String = "MilliSatoshi"
+  override def shortLabel: String = "mGro"
+  override def label: String = "MilliGro"
   override def factorToMsat: Long = 1L
 }
 
 case object SatUnit extends CoinUnit {
   override def code: String = "sat"
-  override def shortLabel: String = "sat"
-  override def label: String = "Satoshi"
+  override def shortLabel: String = "gro"
+  override def label: String = "Gro"
   override def factorToMsat: Long = 1000L // 1 sat = 1 000 msat
 }
 
 case object BitUnit extends CoinUnit {
   override def code: String = "bits"
-  override def shortLabel: String = "bits"
-  override def label: String = "Bits"
+  override def shortLabel: String = "groestls"
+  override def label: String = "Groestls"
   override def factorToMsat: Long = 100 * 1000L // 1 bit = 100 sat = 100 000 msat
 }
 
 case object MBtcUnit extends CoinUnit {
   override def code: String = "mbtc"
-  override def shortLabel: String = "mBTC"
-  override def label: String = "MilliBitcoin"
+  override def shortLabel: String = "mGRS"
+  override def label: String = "MilliGroestlcoin"
   override def factorToMsat: Long = 1000 * 100000L // 1 mbtc = 1 00000 000 msat
 }
 
 case object BtcUnit extends CoinUnit {
   override def code: String = "btc"
-  override def shortLabel: String = "BTC"
-  override def label: String = "Bitcoin"
+  override def shortLabel: String = "GRS"
+  override def label: String = "Groestlcoin"
   override def factorToMsat: Long = 1000 * 100000 * 1000L // 1 btc = 1 000 00000 000 msat
 }
 
