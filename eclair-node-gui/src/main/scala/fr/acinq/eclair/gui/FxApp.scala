@@ -61,7 +61,7 @@ class FxApp extends Application with Logging {
       notifyPreloader(new AppNotification(InfoAppNotification, "Make sure that Groestlcoin Core is up and running and ZMQ parameters are correct."))
     case e@IncompatibleDBException =>
       notifyPreloader(new ErrorNotification("Setup", "Breaking changes!", e))
-      notifyPreloader(new AppNotification(InfoAppNotification, "Eclair is still in alpha, and under heavy development. Last update was not backward compatible."))
+      notifyPreloader(new AppNotification(InfoAppNotification, "Groestlcoin Eclair is still in alpha, and under heavy development. Last update was not backward compatible."))
       notifyPreloader(new AppNotification(InfoAppNotification, "Please reset your datadir."))
     case e@IncompatibleNetworkDBException =>
       notifyPreloader(new ErrorNotification("Setup", "Unreadable network database!", e))

@@ -42,7 +42,7 @@
         <URL value="@../commons/globals.css" />
         <URL value="@main.css" />
     </stylesheets>
-    <Label fx:id="titleLabel" styleClass="notification-title" text="Eclair Notification" GridPane.columnIndex="1" />
+    <Label fx:id="titleLabel" styleClass="notification-title" text="Groestlcoin Eclair Notification" GridPane.columnIndex="1" />
     <ImageView fx:id="icon" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" GridPane.rowSpan="2">
         <Image url="@../commons/images/eclair-square.png" />
     </ImageView>

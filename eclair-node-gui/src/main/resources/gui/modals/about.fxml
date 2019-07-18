@@ -38,17 +38,17 @@
             <children>
                 <TextFlow>
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-strong" text="Eclair v"/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-strong" text="Groestlcoin Eclair v"/>
                         <Text fx:id="version" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-strong"
                               text="Unknown"/>
                         <Text strokeType="OUTSIDE" styleClass="text-sm" strokeWidth="0.0" text=" brought to you by "/>
                         <Text onMouseClicked="#openACINQPage" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="link"
-                              text="ACINQ"/>
+                              text="Groestlcoin"/>
                     </children>
                 </TextFlow>
                 <TextFlow layoutX="10.0" layoutY="90.0">
                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Eclair follows "/>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Groestlcoin Eclair follows "/>
                         <Text onMouseClicked="#openLNRFCPage" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="link"
                               text="the Lightning Network specifications"/>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="."/>

@@ -113,9 +113,9 @@ class Handlers(fKit: Future[Kit])(implicit ec: ExecutionContext = ExecutionConte
     * @param title            Title of the notification
     * @param message          main message of the notification, will not wrap
     * @param notificationType type of the message, default to NONE
-    * @param showAppName      true if you want the notification title to be preceded by "Eclair - ". True by default
+    * @param showAppName      true if you want the notification title to be preceded by "Groestlcoin Eclair - ". True by default
     */
   def notification(title: String, message: String, notificationType: NotificationType = NOTIFICATION_NONE, showAppName: Boolean = true) = {
-    notifsController.foreach(_.addNotification(if (showAppName) s"Eclair - $title" else title, message, notificationType))
+    notifsController.foreach(_.addNotification(if (showAppName) s"Groestlcoin Eclair - $title" else title, message, notificationType))
   }
 }

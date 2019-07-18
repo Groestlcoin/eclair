@@ -283,7 +283,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Help">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#handleOpenAbout" text="About Eclair..."/>
+                                <MenuItem mnemonicParsing="false" onAction="#handleOpenAbout" text="About Groestlcoin Eclair..."/>
                             </items>
                         </Menu>
                     </menus>
