@@ -89,7 +89,7 @@ class FxApp extends Application with Logging {
           val unitConf = setup.config.getString("gui.unit")
           FxApp.unit = Try(CoinUtils.getUnitFromString(unitConf)) match {
             case Failure(_) =>
-              logger.warn(s"$unitConf is not a valid gui unit, must be msat, sat, bits, mbtc or btc. Defaulting to btc.")
+              logger.warn(s"$unitConf is not a valid gui unit, must be mgro, gro, groestls, mgrs or grs. Defaulting to grs.")
               BtcUnit
             case Success(u) => u
           }
@@ -108,7 +108,7 @@ class FxApp extends Application with Logging {
               Platform.runLater(new Runnable {
                 override def run(): Unit = {
                   val scene = new Scene(mainRoot)
-                  primaryStage.setTitle("Eclair")
+                  primaryStage.setTitle("Groestlcoin Eclair")
                   primaryStage.setMinWidth(750)
                   primaryStage.setWidth(980)
                   primaryStage.setMinHeight(400)

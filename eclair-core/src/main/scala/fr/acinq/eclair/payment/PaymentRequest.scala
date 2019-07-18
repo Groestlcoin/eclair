@@ -31,7 +31,7 @@ import scala.util.Try
   * Lightning Payment Request
   * see https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md
   *
-  * @param prefix    currency prefix; lngrs for groestlcoin, lngrs for groestlcoin testnet
+  * @param prefix    currency prefix; lngrs for groestlcoin, lntgrs for groestlcoin testnet
   * @param amount    amount to pay (empty string means no amount is specified)
   * @param timestamp request timestamp (UNIX format)
   * @param nodeId    id of the node emitting the payment request

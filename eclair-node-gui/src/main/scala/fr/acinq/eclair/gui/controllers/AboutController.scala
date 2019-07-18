@@ -35,9 +35,9 @@ class AboutController(hostServices: HostServices) extends Logging {
 
   @FXML def openApacheLicencePage = hostServices.showDocument("https://www.apache.org/licenses/LICENSE-2.0")
 
-  @FXML def openACINQPage = hostServices.showDocument("https://acinq.co")
+  @FXML def openACINQPage = hostServices.showDocument("https://groestlcoin.org")
 
-  @FXML def openGithubPage = hostServices.showDocument("https://github.com/ACINQ/eclair")
+  @FXML def openGithubPage = hostServices.showDocument("https://github.com/groestlcoin/eclair")
 
   @FXML def openLNRFCPage = hostServices.showDocument("https://github.com/lightningnetwork/lightning-rfc")
 }

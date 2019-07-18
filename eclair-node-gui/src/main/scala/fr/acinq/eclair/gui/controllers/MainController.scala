@@ -361,7 +361,7 @@ class MainController(val handlers: Handlers, val hostServices: HostServices) ext
 
     val wallet = setup.nodeParams.watcherType match {
       case BITCOIND => "Groestlcoin-core"
-      case ELECTRUM => "Electrum"
+      case ELECTRUM => "Electrum-GRS"
     }
     bitcoinWallet.setText(wallet)
     bitcoinChain.setText(s"${setup.chain.toUpperCase()}")

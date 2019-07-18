@@ -96,7 +96,7 @@
                         <configuration>
                             <vendor>ACINQ</vendor>
                             <needShortcut>true</needShortcut>
-                            <appName>Eclair</appName>
+                            <appName>Groestlcoin Eclair</appName>
                             <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
                             <skipNativeVersionNumberSanitizing>true</skipNativeVersionNumberSanitizing>
                             <nativeOutputDir>${project.build.directory}/jfx/installer</nativeOutputDir>

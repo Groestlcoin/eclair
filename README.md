@@ -181,8 +181,8 @@ java -jar eclair-node-<version>-<commit_id>.jar <plugin1.jar> <plugin2.jar> <...
 
 ## Testnet usage
 
-Eclair is configured to run on mainnet by default, but you can still run it on testnet (or regtest): start your Bitcoin Node in
- testnet mode (add `testnet=1` in `groestlcoin.conf` or start with `-testnet`), and change Eclair's chain parameter and Bitcoin RPC port:
+Eclair is configured to run on mainnet by default, but you can still run it on testnet (or regtest): start your Groestlcoin Node in
+ testnet mode (add `testnet=1` in `groestlcoin.conf` or start with `-testnet`), and change Eclair's chain parameter and Groestlcoin RPC port:
 
 ```
 eclair.chain=testnet
