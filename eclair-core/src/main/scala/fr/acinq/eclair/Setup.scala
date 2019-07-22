@@ -137,7 +137,7 @@ class Setup(datadir: File,
       } yield (progress, ibd, chainHash, bitcoinVersion, unspentAddresses, blocks, headers)
       // blocking sanity checks
       val (progress, initialBlockDownload, chainHash, bitcoinVersion, unspentAddresses, blocks, headers) = await(future, 30 seconds, "groestlcoind did not respond after 30 seconds")
-      assert(bitcoinVersion >= 2172000, "Eclair requires Groestlcoin Core 2.17.2 or higher")
+      assert(bitcoinVersion >= 2170200, "Eclair requires Groestlcoin Core 2.17.2 or higher")
       assert(chainHash == nodeParams.chainHash, s"chainHash mismatch (conf=${nodeParams.chainHash} != bitcoind=$chainHash)")
       if (chainHash != Block.RegtestGenesisBlock.hash) {
         assert(unspentAddresses.forall(address => !isPay2PubkeyHash(address)), "Make sure that all your UTXOS are segwit UTXOS and not p2pkh (check out our README for more details)")
