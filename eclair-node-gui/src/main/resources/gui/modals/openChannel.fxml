@@ -77,7 +77,7 @@
            GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4"/>
 
     <VBox alignment="CENTER_RIGHT" GridPane.rowIndex="5">
-        <Label styleClass="text-strong" text="Push Amount (msat)"/>
+        <Label styleClass="text-strong" text="Push Amount (mgro)"/>
         <Label styleClass="label-description" text="Sent when opening channel" textAlignment="RIGHT"
                wrapText="true"/>
     </VBox>
