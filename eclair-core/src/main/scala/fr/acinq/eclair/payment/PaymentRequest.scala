@@ -31,7 +31,7 @@ import scala.util.Try
   * Lightning Payment Request
   * see https://github.com/lightningnetwork/lightning-rfc/blob/master/11-payment-encoding.md
   *
-  * @param prefix    currency prefix; lnbc for bitcoin, lntb for bitcoin testnet
+  * @param prefix    currency prefix; lngrs for groestlcoin, lntgrs for groestlcoin testnet
   * @param amount    amount to pay (empty string means no amount is specified)
   * @param timestamp request timestamp (UNIX format)
   * @param nodeId    id of the node emitting the payment request
@@ -113,9 +113,9 @@ object PaymentRequest {
   val DEFAULT_EXPIRY_SECONDS = 3600
 
   val prefixes = Map(
-    Block.RegtestGenesisBlock.hash -> "lnbcrt",
-    Block.TestnetGenesisBlock.hash -> "lntb",
-    Block.LivenetGenesisBlock.hash -> "lnbc")
+    Block.RegtestGenesisBlock.hash -> "lngrsrt",
+    Block.TestnetGenesisBlock.hash -> "lntgrs",
+    Block.LivenetGenesisBlock.hash -> "lngrs")
 
   def apply(chainHash: ByteVector32, amount: Option[MilliSatoshi], paymentHash: ByteVector32, privateKey: PrivateKey,
             description: String, fallbackAddress: Option[String] = None, expirySeconds: Option[Long] = None,
@@ -229,13 +229,13 @@ object PaymentRequest {
     def toAddress(f: FallbackAddress, prefix: String): String = {
       import f.data
       f.version match {
-        case 17 if prefix == "lnbc" => Base58Check.encode(Base58.Prefix.PubkeyAddress, data)
-        case 18 if prefix == "lnbc" => Base58Check.encode(Base58.Prefix.ScriptAddress, data)
-        case 17 if prefix == "lntb" || prefix == "lnbcrt" => Base58Check.encode(Base58.Prefix.PubkeyAddressTestnet, data)
-        case 18 if prefix == "lntb" || prefix == "lnbcrt" => Base58Check.encode(Base58.Prefix.ScriptAddressTestnet, data)
-        case version if prefix == "lnbc" => Bech32.encodeWitnessAddress("bc", version, data)
-        case version if prefix == "lntb" => Bech32.encodeWitnessAddress("tb", version, data)
-        case version if prefix == "lnbcrt" => Bech32.encodeWitnessAddress("bcrt", version, data)
+        case 17 if prefix == "lngrs" => Base58Check.encode(Base58.Prefix.PubkeyAddress, data)
+        case 18 if prefix == "lngrs" => Base58Check.encode(Base58.Prefix.ScriptAddress, data)
+        case 17 if prefix == "lntgrs" || prefix == "lngrsrt" => Base58Check.encode(Base58.Prefix.PubkeyAddressTestnet, data)
+        case 18 if prefix == "lntgrs" || prefix == "lngrsrt" => Base58Check.encode(Base58.Prefix.ScriptAddressTestnet, data)
+        case version if prefix == "lngrs" => Bech32.encodeWitnessAddress("grs", version, data)
+        case version if prefix == "lntgrs" => Bech32.encodeWitnessAddress("tgrs", version, data)
+        case version if prefix == "lngrsrt" => Bech32.encodeWitnessAddress("grsrt", version, data)
       }
     }
   }
@@ -473,4 +473,3 @@ object PaymentRequest {
     Bech32.encode(hrp, int5s.toArray)
   }
 }
-

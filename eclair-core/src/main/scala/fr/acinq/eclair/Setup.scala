@@ -231,7 +231,7 @@ case class Kit(nodeParams: NodeParams,
                wallet: EclairWallet)
 
 
-case object BitcoinWalletDisabledException extends RuntimeException("bitcoind must have wallet support enabled")
+case object BitcoinWalletDisabledException extends RuntimeException("groestlcoind must have wallet support enabled")
 
 case object EmptyAPIPasswordException extends RuntimeException("must set a password for the json-rpc api")
 

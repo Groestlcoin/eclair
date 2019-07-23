@@ -38,14 +38,14 @@ import scala.concurrent.duration._
 class ElectrumWatcherSpec extends TestKit(ActorSystem("test")) with FunSuiteLike with BitcoindService with ElectrumxService  with BeforeAndAfterAll with Logging {
 
   override def beforeAll(): Unit = {
-    logger.info("starting bitcoind")
+    logger.info("starting groestlcoind")
     startBitcoind()
     waitForBitcoindReady()
     super.beforeAll()
   }
 
   override def afterAll(): Unit = {
-    logger.info("stopping bitcoind")
+    logger.info("stopping groestlcoind")
     stopBitcoind()
     super.afterAll()
     TestKit.shutdownActorSystem(system)

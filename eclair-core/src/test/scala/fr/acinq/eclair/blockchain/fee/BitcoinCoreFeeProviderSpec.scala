@@ -42,8 +42,8 @@ class BitcoinCoreFeeProviderSpec extends TestKit(ActorSystem("test")) with Bitco
     "eclair.chain" -> "regtest",
     "eclair.spv" -> false,
     "eclair.server.public-ips.1" -> "localhost",
-    "eclair.bitcoind.port" -> 28333,
-    "eclair.bitcoind.rpcport" -> 28332,
+    "eclair.bitcoind.port" -> 21331,
+    "eclair.bitcoind.rpcport" -> 21441,
     "eclair.router-broadcast-interval" -> "2 second",
     "eclair.auto-reconnect" -> false))
   val config = ConfigFactory.load(commonConfig).getConfig("eclair")
@@ -60,7 +60,7 @@ class BitcoinCoreFeeProviderSpec extends TestKit(ActorSystem("test")) with Bitco
     stopBitcoind()
   }
 
-  test("wait bitcoind ready") {
+  test("wait groestlcoind ready") {
     waitForBitcoindReady()
   }
 

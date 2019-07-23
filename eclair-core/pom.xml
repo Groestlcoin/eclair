@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>fr.acinq.eclair</groupId>
+        <groupId>org.groestlcoin.eclair</groupId>
         <artifactId>eclair_2.11</artifactId>
         <version>0.3.3-android-SNAPSHOT</version>
     </parent>
@@ -79,10 +79,10 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <bitcoind.url>https://bitcoin.org/bin/bitcoin-core-0.17.1/bitcoin-0.17.1-x86_64-linux-gnu.tar.gz
+                <bitcoind.url>https://github.com/Groestlcoin/groestlcoin/releases/download/v2.17.2/groestlcoin-2.17.2-x86_64-linux-gnu.tar.gz
                 </bitcoind.url>
-                <bitcoind.md5>724043999e2b5ed0c088e8db34f15d43</bitcoind.md5>
-                <bitcoind.sha1>546ee35d4089c7ccc040a01cdff3362599b8bc53</bitcoind.sha1>
+                <bitcoind.md5>6647b099d94a2dbdc0e967e7c2fcf136</bitcoind.md5>
+                <bitcoind.sha1>f26cfa22c15fa452cc5389cd2be3b4348a8b7514</bitcoind.sha1>
             </properties>
         </profile>
         <profile>
@@ -93,10 +93,10 @@
                 </os>
             </activation>
             <properties>
-                <bitcoind.url>https://bitcoin.org/bin/bitcoin-core-0.17.1/bitcoin-0.17.1-osx64.tar.gz
+                <bitcoind.url>https://github.com/Groestlcoin/groestlcoin/releases/download/v2.17.2/groestlcoin-2.17.2-x86_64-apple-darwin14.tar.gz
                 </bitcoind.url>
-                <bitcoind.md5>b5a792c6142995faa42b768273a493bd</bitcoind.md5>
-                <bitcoind.sha1>8bd51c7024d71de07df381055993e9f472013db8</bitcoind.sha1>
+                <bitcoind.md5>d958801fd80dd9207b66c7aeda162c36</bitcoind.md5>
+                <bitcoind.sha1>73246f96e5d9c86b87adba42ec2d4997b8d45ce9</bitcoind.sha1>
             </properties>
         </profile>
         <profile>
@@ -107,9 +107,9 @@
                 </os>
             </activation>
             <properties>
-                <bitcoind.url>https://bitcoin.org/bin/bitcoin-core-0.17.1/bitcoin-0.17.1-win64.zip</bitcoind.url>
-                <bitcoind.md5>b0e824e9dd02580b5b01f073f3c89858</bitcoind.md5>
-                <bitcoind.sha1>4e17bad7d08c465b444143a93cd6eb1c95076e3f</bitcoind.sha1>
+                <bitcoind.url>https://github.com/Groestlcoin/groestlcoin/releases/download/v2.17.2/groestlcoin-2.17.2-x86_64-w64-mingw32.zip</bitcoind.url>
+                <bitcoind.md5>0fba7de2806cc4f9ffe9be840b850088</bitcoind.md5>
+                <bitcoind.sha1>ee8bc93ccae007b3d5fb8d1f29d711891378f2de</bitcoind.sha1>
             </properties>
         </profile>
     </profiles>
@@ -156,8 +156,8 @@
         </dependency>
         <!-- BITCOIN -->
         <dependency>
-            <groupId>fr.acinq</groupId>
-            <artifactId>bitcoin-lib_${scala.version.short}</artifactId>
+            <groupId>org.groestlcoin</groupId>
+            <artifactId>groestlcoin-lib_${scala.version.short}</artifactId>
             <version>${bitcoinlib.version}</version>
             <exclusions>
                 <exclusion>

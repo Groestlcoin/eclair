@@ -52,13 +52,13 @@ class ElectrumWalletSpec extends TestKit(ActorSystem("test")) with FunSuiteLike 
   var electrumClient: ActorRef = _
 
   override def beforeAll(): Unit = {
-    logger.info("starting bitcoind")
+    logger.info("starting groestlcoind")
     startBitcoind()
     super.beforeAll()
   }
 
   override def afterAll(): Unit = {
-    logger.info("stopping bitcoind")
+    logger.info("stopping groestlcoind")
     stopBitcoind()
     super.afterAll()
     TestKit.shutdownActorSystem(system)
@@ -76,7 +76,7 @@ class ElectrumWalletSpec extends TestKit(ActorSystem("test")) with FunSuiteLike 
 
   test("generate 150 blocks") {
     val sender = TestProbe()
-    logger.info(s"waiting for bitcoind to initialize...")
+    logger.info(s"waiting for groestlcoind to initialize...")
     awaitCond({
       sender.send(bitcoincli, BitcoinReq("getnetworkinfo"))
       sender.receiveOne(5 second).isInstanceOf[JValue]
@@ -223,7 +223,7 @@ class ElectrumWalletSpec extends TestKit(ActorSystem("test")) with FunSuiteLike 
     val probe = TestProbe()
     val GetBalanceResponse(confirmed, unconfirmed) = getBalance(probe)
 
-    // create a tx that sends money to Bitcoin Core's address
+    // create a tx that sends money to Groestlcoin Core's address
     probe.send(bitcoincli, BitcoinReq("getnewaddress"))
     val JString(address) = probe.expectMsgType[JValue]
     val tx = Transaction(version = 2, txIn = Nil, txOut = TxOut(Btc(1), fr.acinq.eclair.addressToPublicKeyScript(address, Block.RegtestGenesisBlock.hash)) :: Nil, lockTime = 0L)
@@ -256,7 +256,7 @@ class ElectrumWalletSpec extends TestKit(ActorSystem("test")) with FunSuiteLike 
     val GetBalanceResponse(confirmed, unconfirmed) = getBalance(probe)
     logger.info(s"current balance is $confirmed $unconfirmed")
 
-    // create a tx that sends money to Bitcoin Core's address
+    // create a tx that sends money to Groestlcoin Core's address
     probe.send(bitcoincli, BitcoinReq("getnewaddress"))
     val JString(address) = probe.expectMsgType[JValue]
     val tx = Transaction(version = 2, txIn = Nil, txOut = TxOut(Btc(1), fr.acinq.eclair.addressToPublicKeyScript(address, Block.RegtestGenesisBlock.hash)) :: Nil, lockTime = 0L)

@@ -24,7 +24,7 @@ import org.json4s.jackson.Serialization
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BasicBitcoinJsonRPCClient(user: String, password: String, host: String = "127.0.0.1", port: Int = 8332, ssl: Boolean = false)(implicit http: SttpBackend[Future, Nothing]) extends BitcoinJsonRPCClient {
+class BasicBitcoinJsonRPCClient(user: String, password: String, host: String = "127.0.0.1", port: Int = 1441, ssl: Boolean = false)(implicit http: SttpBackend[Future, Nothing]) extends BitcoinJsonRPCClient {
 
   val scheme = if (ssl) "https" else "http"
   implicit val formats = DefaultFormats.withBigDecimal

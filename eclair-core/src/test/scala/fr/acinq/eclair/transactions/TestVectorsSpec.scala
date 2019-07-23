@@ -49,8 +49,8 @@ class TestVectorsSpec extends FunSuite with Logging {
   results.put(name, current.toMap)
 
   /*
-   # start bitcoin-qt or bitcoind in regtest mode with an empty data directory and priority set to false
-   $ rm -rf /tmp/btc1 && mkdir /tmp/btc1 && ~/code/bitcoin/src/qt/bitcoin-qt -txindex -regtest --relaypriority=false -datadir=/tmp/btc1 -port=18441
+   # start groestlcoin-qt or groestlcoind in regtest mode with an empty data directory and priority set to false
+   $ rm -rf /tmp/grs1 && mkdir /tmp/grs1 && ~/code/groestlcoin/src/qt/groestlcoin-qt -txindex -regtest --relaypriority=false -datadir=/tmp/grs1 -port=18441
 
    # import block #1 (you already have the genesis block #0, using the debug console:
    submitblock 0000002006226e46111a0b59caaf126043eb5bbf28c34f3a5e332a1fc7b2b73cf188910faf2d96b7d903bc86c5dd4b609ceee6ab0ca396cac66c2eac1f671d87a5bd3eed1b849458ffff7f20000000000102000000010000000000000000000000000000000000000000000000000000000000000000ffffffff03510101ffffffff0200f2052a010000002321023699c8328fd3b3071558b651fb18c51e2ea93ebd0e507966b912cb1babf3ff97ac0000000000000000266a24aa21a9ede2f61c3f71d1defd3fa999dfa36953755c690689799962b48bebd836974e8cf900000000

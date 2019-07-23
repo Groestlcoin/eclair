@@ -1,35 +1,23 @@
 {
-    "hsmithsxurybd7uh.onion": {
-        "pruning": "-",
-        "s": "53012",
-        "t": "53011",
-        "version": "1.4"
-    },
-    "testnet.hsmiths.com": {
-        "pruning": "-",
-        "s": "53012",
-        "t": "53011",
-        "version": "1.4"
-    },
-    "testnet.qtornado.com": {
+    "electrum-test1.groestlcoin.org": {
         "pruning": "-",
         "s": "51002",
         "t": "51001",
         "version": "1.4"
     },
-    "testnet1.bauerj.eu": {
+    "electrum-test2.groestlcoin.org": {
         "pruning": "-",
-        "s": "50002",
-        "t": "50001",
+        "s": "51002",
+        "t": "51001",
         "version": "1.4"
     },
-    "tn.not.fyi": {
+    "7frvhgofuf522b5i.onion": {
         "pruning": "-",
-        "s": "55002",
-        "t": "55001",
+        "s": "51002",
+        "t": "51001",
         "version": "1.4"
     },
-    "bitcoin.cluelessperson.com": {
+    "aocojvqcybdoxekv.onion": {
         "pruning": "-",
         "s": "51002",
         "t": "51001",
