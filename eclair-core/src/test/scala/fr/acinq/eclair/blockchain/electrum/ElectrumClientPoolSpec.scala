@@ -35,7 +35,7 @@ class ElectrumClientPoolSpec extends TestKit(ActorSystem("test")) with FunSuiteL
   var pool: ActorRef = _
   val probe = TestProbe()
   // this is tx #2690 of block #500000
-  val referenceTx = Transaction.read("0200000001983c5b32ced1de5ae97d3ce9b7436f8bb0487d15bf81e5cae97b1e238dc395c6000000006a47304402205957c75766e391350eba2c7b752f0056cb34b353648ecd0992a8a81fc9bcfe980220629c286592842d152cdde71177cd83086619744a533f262473298cacf60193500121021b8b51f74dbf0ac1e766d162c8707b5e8d89fc59da0796f3b4505e7c0fb4cf31feffffff0276bd0101000000001976a914219de672ba773aa0bc2e15cdd9d2e69b734138fa88ac3e692001000000001976a914301706dede031e9fb4b60836e073a4761855f6b188ac09a10700")
+  val referenceTx = Transaction.read("02000000000104614a6036294d8b844e96aa1dd5d8896fa3ffa09f1315d0213269c600fe8646e2000000006a473044022025ea0e8fa96ddf278f3a12d67fec151988d676c158819caf4fa5265e5fd7fc5f02204b59c7a6c6ecc7b9c767b2ede2d0b3b12c186816b085026252f667e415c8c98e012102ff2d803e78629ebb85a3524553d3cd8371348e0b8a0f8dae82ad3ca4359294acfeffffffb701669d1a42a43aff48a6901b91782d00cc147e6c19911e9e0a9ad8f6c0fbae010000006a473044022062579557cd1418296c6cf2dbc143eeb37cc388f4e1c63587ff98c1c5b322842502206b0ad894f7757387d88666ec2f6b4756fafcf67b70c24aba313287997854310201210295aea4ca6889f1442ffc9225c6200c565e1ce4d2bc74112453c5f4cdb0eaa1a8feffffff5982be61f1378324c827187f941c4730d0103f0bd8538597a16681e5a4e63bc90200000017160014d4aac9490dc21cce338d7c795abdfe2925251894feffffff220b978c0d63acfca3778e1468ff8cc867940f4c34c55afcfff3915bb7120ba1010000001716001403aef4db154f9ccce3c5dcee0b10c58253d46f4ffeffffff0100f11788640000001976a9149ce52f3331649b976d943f61dde5e75008229ac788ac000002473044022040f147b4b402993880406012c042c3bbed80ca3a97bfe32a1dd896a4fcbe8bf7022052aee69956c54b7b56c567806d73e9f27a9775bf51c5e739d189ee6c045609e2012103a804561c62d8f0aa899d4f5a171f1d048ca7ae0e2c167682fc3d9c3fccdced0b02473044022008662cefe3950155821ffb55a113e6b19a29985811b498e26cbbee6884e22a0c0220158163e724ad0e1b9c5845cda16e771f724913e33360898d9de74618c0fe1678012103d36e94e0107461ff03cd0825e60e7d5fe431b0bf8384e6b4a528b04ac73426ca9df12800")
   val scriptHash = Crypto.sha256(referenceTx.txOut(0).publicKeyScript).reverse
   val serverAddresses = {
     val stream = classOf[ElectrumClientSpec].getResourceAsStream("/electrum/servers_mainnet.json")
@@ -85,12 +85,12 @@ class ElectrumClientPoolSpec extends TestKit(ActorSystem("test")) with FunSuiteL
   }
 
   test("get merkle tree") {
-    probe.send(pool, GetMerkle(referenceTx.txid, 500000))
+    probe.send(pool, GetMerkle(referenceTx.txid, 2683294))
     val response = probe.expectMsgType[GetMerkleResponse](timeout)
     assert(response.txid == referenceTx.txid)
-    assert(response.block_height == 500000)
-    assert(response.pos == 2690)
-    assert(response.root == ByteVector32(hex"1f6231ed3de07345b607ec2a39b2d01bec2fe10dfb7f516ba4958a42691c9531"))
+    assert(response.block_height == 2683294)
+    assert(response.pos == 1)
+    assert(response.root == ByteVector32(hex"c0c6ddc8e2bbdcd71f4438607525882a59a62081a90a7f12b477554110fc28bf"))
   }
 
   test("header subscription") {
@@ -110,7 +110,7 @@ class ElectrumClientPoolSpec extends TestKit(ActorSystem("test")) with FunSuiteL
   test("get scripthash history") {
     probe.send(pool, GetScriptHashHistory(scriptHash))
     val GetScriptHashHistoryResponse(scriptHash1, history) = probe.expectMsgType[GetScriptHashHistoryResponse](timeout)
-    assert(history.contains((TransactionHistoryItem(500000, referenceTx.txid))))
+    assert(history.contains((TransactionHistoryItem(2683294, referenceTx.txid))))
   }
 
   test("list script unspents") {
