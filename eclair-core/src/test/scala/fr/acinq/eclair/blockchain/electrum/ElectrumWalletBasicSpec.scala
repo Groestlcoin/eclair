@@ -79,9 +79,9 @@ class ElectrumWalletBasicSpec extends FunSuite with Logging {
 
 
   test("compute addresses") {
-    val priv = PrivateKey.fromBase58("cRumXueoZHjhGXrZWeFoEBkeDHu2m8dW5qtFBCqSAt4LDR2Hnd8Q", Base58.Prefix.SecretKeyTestnet)._1
-    assert(Base58Check.encode(Base58.Prefix.PubkeyAddressTestnet, priv.publicKey.hash160) == "ms93boMGZZjvjciujPJgDAqeR86EKBf9MC")
-    assert(segwitAddress(priv, Block.RegtestGenesisBlock.hash) == "2MscvqgGXMTYJNAY3owdUtgWJaxPUjH38Cx")
+    val priv = PrivateKey.fromBase58("cRumXueoZHjhGXrZWeFoEBkeDHu2m8dW5qtFBCqSAt4LDR3ZsgWu", Base58.Prefix.SecretKeyTestnet)._1
+    assert(Base58Check.encode(Base58.Prefix.PubkeyAddressTestnet, priv.publicKey.hash160) == "ms93boMGZZjvjciujPJgDAqeR86EHkTRTx")
+    assert(segwitAddress(priv, Block.RegtestGenesisBlock.hash) == "2MscvqgGXMTYJNAY3owdUtgWJaxPUnnhgt7")
   }
 
   test("implement BIP49") {
@@ -91,7 +91,7 @@ class ElectrumWalletBasicSpec extends FunSuite with Logging {
 
     val accountMaster = accountKey(master, Block.RegtestGenesisBlock.hash)
     val firstKey = derivePrivateKey(accountMaster, 0)
-    assert(segwitAddress(firstKey, Block.RegtestGenesisBlock.hash) === "2MxJejujQJRRJdbfTKNQQ94YCnxJwRaE7yo")
+    assert(segwitAddress(firstKey, Block.RegtestGenesisBlock.hash) === "2MxJejujQJRRJdbfTKNQQ94YCnxJwT5GdGh")
   }
 
   test("complete transactions (enough funds)") {
