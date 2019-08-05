@@ -167,7 +167,7 @@ object Blockchain extends Logging {
         // on mainnet all blocks with a re-targeting window have the same difficulty target
         // on testnet it doesn't hold, there can be a drop in difficulty if there are no blocks for 20 minutes
         blockchain.chainHash match {
-          case Block.LivenetGenesisBlock | Block.RegtestGenesisBlock.hash => require(current.bits == previous.bits)
+          case Block.LivenetGenesisBlock /*| Block.RegtestGenesisBlock.hash*/ => require(current.bits == previous.bits)
           case _ => ()
         }
         current

@@ -101,7 +101,7 @@ class ElectrumWallet(seed: ByteVector, client: ActorRef, params: ElectrumWallet.
   startWith(DISCONNECTED, {
     val blockchain = params.chainHash match {
       // regtest is a special case, there are no checkpoints and we start with a single header
-      case Block.RegtestGenesisBlock.hash => Blockchain.fromGenesisBlock(Block.RegtestGenesisBlock.hash, Block.RegtestGenesisBlock.header)
+//      case Block.RegtestGenesisBlock.hash => Blockchain.fromGenesisBlock(Block.RegtestGenesisBlock.hash, Block.RegtestGenesisBlock.header)
       case _ =>
         val checkpoints = CheckPoint.load(params.chainHash, params.walletDb)
         Blockchain.fromCheckpoints(params.chainHash, checkpoints)
