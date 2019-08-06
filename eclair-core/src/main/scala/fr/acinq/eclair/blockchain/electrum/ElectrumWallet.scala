@@ -592,7 +592,7 @@ object ElectrumWallet {
 
   def accountPath(chainHash: ByteVector32): List[Long] = chainHash match {
     case Block.RegtestGenesisBlock.hash | Block.TestnetGenesisBlock.hash => hardened(49) :: hardened(1) :: hardened(0) :: Nil
-    case Block.LivenetGenesisBlock.hash => hardened(49) :: hardened(0) :: hardened(0) :: Nil
+    case Block.LivenetGenesisBlock.hash => hardened(49) :: hardened(17) :: hardened(0) :: Nil
   }
 
   /**
