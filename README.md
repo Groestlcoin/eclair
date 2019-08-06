@@ -17,9 +17,11 @@ This software follows the [Lightning Network Specifications (BOLTs)](https://git
  - Keep in mind that it is beta-quality software and **don't put too much money** in it
  - Eclair's JSON API should **NOT** be accessible from the outside world (similarly to Groestlcoin Core API)
 
+
 ---
 
 ## Lightning Network Specification Compliance
+
 Please see the latest [release note](https://github.com/ACINQ/eclair/releases) for detailed information on BOLT compliance.
 
 ## Overview
@@ -31,6 +33,13 @@ Please see the latest [release note](https://github.com/ACINQ/eclair/releases) f
 Eclair offers a feature rich HTTP API that enables application developers to easily integrate.
 
 For more information please visit the [API documentation website](https://acinq.github.io/eclair).
+
+## Documentation
+
+Please visit our [wiki](https://github.com/acinq/eclair/wiki) to find detailed instructions on how to configure your
+node, connect to other nodes, open channels, send and receive payments and more advanced scenario.
+
+You will find detailed guides and frequently asked questions there.
 
 ## Installation
 
@@ -44,6 +53,7 @@ You can configure your Groestlcoin Node to use either `p2sh-segwit` addresses or
 
 Run groestlcoind with the following minimal `groestlcoin.conf`:
 ```
+
 server=1
 rpcuser=foo
 rpcpassword=bar
@@ -55,17 +65,22 @@ zmqpubrawtx=tcp://127.0.0.1:29000
 ### Installing Eclair
 
 Eclair is developed in [Scala](https://www.scala-lang.org/), a powerful functional language that runs on the JVM, and is packaged as a JAR (Java Archive) file. We provide 2 different packages, which internally use the same core libraries:
+
 * eclair-node, which is a headless application that you can run on servers and desktops, and control from the command line
 * eclair-node-gui, which also includes a JavaFX GUI
 
 To run Eclair, you first need to install Java, we recommend that you use [OpenJDK 11](https://adoptopenjdk.net/?variant=openjdk11&jvmVariant=hotspot). Eclair will also run on Oracle JDK 1.8, Oracle JDK 11, and other versions of OpenJDK but we don't recommend using them.
 
 Then download our latest [release](https://github.com/ACINQ/eclair/releases) and depending on whether or not you want a GUI run the following command:
+
 * with GUI:
+
 ```shell
 java -jar eclair-node-gui-<version>-<commit_id>.jar
 ```
+
 * without GUI:
+
 ```shell
 java -jar eclair-node-<version>-<commit_id>.jar
 ```
@@ -78,7 +93,7 @@ Eclair reads its configuration file, and write its logs, to `~/.eclair` by defau
 
 To change your node's configuration, create a file named `eclair.conf` in `~/.eclair`. Here's an example configuration file:
 
-```
+```conf
 eclair.node-alias=eclair
 eclair.node-color=49daaa
 ```
@@ -115,6 +130,7 @@ eclair.headless       | Run eclair without a GUI                   |
 eclair.printToConsole | Log to stdout (in addition to eclair.log)  |
 
 For example, to specify a different data directory you would run the following command:
+
 ```shell
 java -Declair.datadir=/tmp/node1 -jar eclair-node-gui-<version>-<commit_id>.jar
 ```
@@ -130,22 +146,24 @@ java -Dlogback.configurationFile=/path/to/logback-custom.xml -jar eclair-node-gu
 #### Backup
 
 The files that you need to backup are located in your data directory. You must backup:
-- your seed (`seed.dat`)
-- your channel database (`eclair.sqlite.bak` under directory `mainnet`, `testnet` or `regtest` depending on which chain you're running on)
+
+* your seed (`seed.dat`)
+* your channel database (`eclair.sqlite.bak` under directory `mainnet`, `testnet` or `regtest` depending on which chain you're running on)
 
 Your seed never changes once it has been created, but your channels will change whenever you receive or send payments. Eclair will
 create and maintain a snapshot of its database, named `eclair.sqlite.bak`, in your data directory, and update it when needed. This file is
 always consistent and safe to use even when Eclair is running, and this is what you should backup regularly.
 
 For example you could configure a `cron` task for your backup job. Or you could configure an optional notification script to be called by eclair once a new database snapshot has been created, using the following option:
-```
+
+```conf
 eclair.backup-notify-script = "/absolute/path/to/script.sh"
 ```
+
 Make sure that your script is executable and uses an absolute path name for `eclair.sqlite.bak`.
 
 Note that depending on your filesystem, in your backup process we recommend first moving `eclair.sqlite.bak` to some temporary file
 before copying that file to your final backup location.
-
 
 ## Docker
 
@@ -153,18 +171,19 @@ A [Dockerfile](Dockerfile) image is built on each commit on [docker hub](https:/
 
 You can use the `JAVA_OPTS` environment variable to set arguments to `eclair-node`.
 
-```
+```shell
 docker run -ti --rm -e "JAVA_OPTS=-Xmx512m -Declair.api.binding-ip=0.0.0.0 -Declair.node-alias=node-pm -Declair.printToConsole" acinq/eclair
 ```
 
 If you want to persist the data directory, you can make the volume to your host with the `-v` argument, as the following example:
 
-```
+```shell
 docker run -ti --rm -v "/path_on_host:/data" -e "JAVA_OPTS=-Declair.printToConsole" acinq/eclair
 ```
 
 If you enabled the API you can check the status of eclair using the command line tool:
-```
+
+```shell
 docker exec <container_name> eclair-cli -p foobar getinfo
 ```
 
@@ -175,6 +194,7 @@ For advanced usage, Eclair supports plugins written in Scala, Java, or any JVM-c
 A valid plugin is a jar that contains an implementation of the [Plugin](eclair-node/src/main/scala/fr/acinq/eclair/Plugin.scala) interface.
 
 Here is how to run Eclair with plugins:
+
 ```shell
 java -jar eclair-node-<version>-<commit_id>.jar <plugin1.jar> <plugin2.jar> <...>
 ```
@@ -184,7 +204,7 @@ java -jar eclair-node-<version>-<commit_id>.jar <plugin1.jar> <plugin2.jar> <...
 Eclair is configured to run on mainnet by default, but you can still run it on testnet (or regtest): start your Groestlcoin Node in
  testnet mode (add `testnet=1` in `groestlcoin.conf` or start with `-testnet`), and change Eclair's chain parameter and Groestlcoin RPC port:
 
-```
+```conf
 eclair.chain=testnet
 eclair.bitcoind.rpcport=17766
 ```
@@ -192,7 +212,7 @@ eclair.bitcoind.rpcport=17766
 You may also want to take advantage of the new configuration sections in `groestlcoin.conf` to manage parameters that are network specific,
 so you can easily run your groestlcoin node on both mainnet and testnet. For example you could use:
 
-```
+```conf
 server=1
 txindex=1
 [main]
@@ -208,6 +228,7 @@ zmqpubrawtx=tcp://127.0.0.1:29001
 ```
 
 ## Resources
-- [1] [The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments](https://lightning.network/lightning-network-paper.pdf) by Joseph Poon and Thaddeus Dryja
-- [2] [Reaching The Ground With Lightning](https://github.com/ElementsProject/lightning/raw/master/doc/deployable-lightning.pdf) by Rusty Russell
-- [3] [Lightning Network Explorer](https://explorer.acinq.co) - Explore testnet LN nodes you can connect to
+
+* [1] [The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments](https://lightning.network/lightning-network-paper.pdf) by Joseph Poon and Thaddeus Dryja
+* [2] [Reaching The Ground With Lightning](https://github.com/ElementsProject/lightning/raw/master/doc/deployable-lightning.pdf) by Rusty Russell
+* [3] [Lightning Network Explorer](https://explorer.acinq.co) - Explore testnet LN nodes you can connect to
