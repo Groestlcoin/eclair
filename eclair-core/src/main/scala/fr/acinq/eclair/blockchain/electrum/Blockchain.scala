@@ -167,7 +167,7 @@ object Blockchain extends Logging {
         // on mainnet all blocks with a re-targeting window have the same difficulty target
         // on testnet it doesn't hold, there can be a drop in difficulty if there are no blocks for 20 minutes
         blockchain.chainHash match {
-          case Block.LivenetGenesisBlock /*| Block.RegtestGenesisBlock.hash*/ => require(current.bits == previous.bits)
+//          case Block.LivenetGenesisBlock /*| Block.RegtestGenesisBlock.hash*/ => require(current.bits == previous.bits)
           case _ => ()
         }
         current
@@ -179,7 +179,7 @@ object Blockchain extends Logging {
       val checkpoint = blockchain.checkpoints(cpindex)
       require(headers(0).hashPreviousBlock == checkpoint.hash)
       blockchain.chainHash match {
-        case Block.LivenetGenesisBlock.hash => require(headers(0).bits == checkpoint.nextBits)
+//        case Block.LivenetGenesisBlock.hash => require(headers(0).bits == checkpoint.nextBits)
         case _ => ()
       }
     }
@@ -190,9 +190,9 @@ object Blockchain extends Logging {
       val nextCheckpoint = blockchain.checkpoints(cpindex + 1)
       require(headers.last.hash == nextCheckpoint.hash)
       blockchain.chainHash match {
-        case Block.LivenetGenesisBlock.hash =>
-          val diff = BlockHeader.calculateNextWorkRequired(headers.last, headers.head.time)
-          require(diff == nextCheckpoint.nextBits)
+ //       case Block.LivenetGenesisBlock.hash =>
+ //         val diff = BlockHeader.calculateNextWorkRequired(headers.last, headers.head.time)
+ //         require(diff == nextCheckpoint.nextBits)
         case _ => ()
       }
     }
@@ -241,10 +241,10 @@ object Blockchain extends Logging {
     require(BlockHeader.checkProofOfWork(header), s"invalid proof of work for $header")
     blockchain.headersMap.get(header.hashPreviousBlock) match {
       case Some(parent) if parent.height == height - 1 =>
-        if (height % RETARGETING_PERIOD != 0 && (blockchain.chainHash == Block.LivenetGenesisBlock.hash || blockchain.chainHash == Block.RegtestGenesisBlock.hash)) {
+        if (height % RETARGETING_PERIOD != 0 && (blockchain.chainHash == Block.LivenetGenesisBlock.hash /*|| blockchain.chainHash == Block.RegtestGenesisBlock.hash*/)) {
           // check difficulty target, which should be the same as for the parent block
           // we only check this on mainnet, on testnet rules are much more lax
-          require(header.bits == parent.header.bits, s"header invalid difficulty target for ${header}, it should be ${parent.header.bits}")
+          //require(header.bits == parent.header.bits, s"header invalid difficulty target for ${header}, it should be ${parent.header.bits}")
         }
         val blockIndex = BlockIndex(header, height, Some(parent), parent.chainwork + Blockchain.chainWork(header))
         val headersMap1 = blockchain.headersMap + (blockIndex.hash -> blockIndex)
