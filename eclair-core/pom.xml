@@ -162,7 +162,7 @@
         </dependency>
         <!-- BITCOIN -->
         <dependency>
-            <groupId>org.groestlcoin</groupId>
+            <groupId>com.github.groestlcoin</groupId>
             <artifactId>groestlcoin-lib_${scala.version.short}</artifactId>
             <version>${bitcoinlib.version}</version>
             <exclusions>
