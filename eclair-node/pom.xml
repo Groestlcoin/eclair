@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.groestlcoin.eclair</groupId>
+        <groupId>com.github.groestlcoin</groupId>
         <artifactId>eclair_2.11</artifactId>
         <version>0.3.2</version>
     </parent>
@@ -70,7 +70,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.groestlcoin.eclair</groupId>
+            <groupId>com.github.groestlcoin</groupId>
             <artifactId>eclair-core_${scala.version.short}</artifactId>
             <version>${project.version}</version>
         </dependency>

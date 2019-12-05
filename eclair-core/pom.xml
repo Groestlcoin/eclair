@@ -19,7 +19,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.groestlcoin.eclair</groupId>
+        <groupId>com.github.groestlcoin</groupId>
         <artifactId>eclair_2.11</artifactId>
         <version>0.3.2</version>
     </parent>
@@ -111,6 +111,33 @@
                 <bitcoind.md5>0fba7de2806cc4f9ffe9be840b850088</bitcoind.md5>
                 <bitcoind.sha1>ee8bc93ccae007b3d5fb8d1f29d711891378f2de</bitcoind.sha1>
             </properties>
+        </profile>
+        <profile>
+            <id>release</id>
+            <activation>
+                <property>
+                    <name>performRelease</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
