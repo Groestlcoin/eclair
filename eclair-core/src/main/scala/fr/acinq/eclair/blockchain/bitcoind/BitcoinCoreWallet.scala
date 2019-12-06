@@ -122,7 +122,7 @@ class BitcoinCoreWallet(rpcClient: BitcoinJsonRPCClient)(implicit ec: ExecutionC
     exists <- getTransaction(tx.txid)
       .map(_ => true) // we have found the transaction
       .recover {
-      case JsonRPCError(Error(_, message)) if message.contains("indexing") =>
+      case JsonRPCError(Error(_, message)) if message.contains("index") =>
         sys.error("Fatal error: groestlcoind is indexing!!")
         System.exit(1) // groestlcoind is indexing, that's a fatal error!!
         false // won't be reached
