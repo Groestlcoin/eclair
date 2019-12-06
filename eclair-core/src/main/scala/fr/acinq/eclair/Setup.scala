@@ -157,8 +157,8 @@ class Setup(datadir: File,
             .map(value => (value \ "address").extract[String])
         }
         _ <- chain match {
-          case "mainnet" => bitcoinClient.invoke("getrawtransaction", "2157b554dcfda405233906e461ee593875ae4b1b97615872db6a25130ecc1dd6") // coinbase of #500000
-          case "testnet" => bitcoinClient.invoke("getrawtransaction", "8f38a0dd41dc0ae7509081e262d791f8d53ed6f884323796d5ec7b0966dd3825") // coinbase of #1500000
+          case "mainnet" => bitcoinClient.invoke("getrawtransaction", "497da90dac24313d07e70879541a476873d96694f96c0ec92628e2c405468949") // coinbase of #1000000
+          case "testnet" => bitcoinClient.invoke("getrawtransaction", "9c1efadc74af31827835a4b31ff692657cbe2e2689d36ed622c3c99017528be7") // coinbase of #500000
           case "regtest" => Future.successful(())
         }
       } yield (progress, ibd, chainHash, bitcoinVersion, unspentAddresses, blocks, headers)
