@@ -67,10 +67,10 @@ trait BitcoindService extends Logging {
     if (!Files.exists(new File(PATH_BITCOIND_DATADIR.toString, "groestlcoin.conf").toPath)) {
       val is = classOf[IntegrationSpec].getResourceAsStream("/integration/groestlcoin.conf")
       val conf = Source.fromInputStream(is).mkString
-          .replace("28333", bitcoindPort.toString)
-          .replace("28332", bitcoindRpcPort.toString)
-          .replace("28334", bitcoindZmqBlockPort.toString)
-          .replace("28335", bitcoindZmqTxPort.toString)
+          .replace("21441", bitcoindPort.toString)
+          .replace("21442", bitcoindRpcPort.toString)
+          .replace("21444", bitcoindZmqBlockPort.toString)
+          .replace("21445", bitcoindZmqTxPort.toString)
       Files.writeString(new File(PATH_BITCOIND_DATADIR.toString, "bitcoin.conf").toPath, conf)
     }
 
