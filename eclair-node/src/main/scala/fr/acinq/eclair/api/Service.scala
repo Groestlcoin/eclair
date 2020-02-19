@@ -187,6 +187,9 @@ trait Service extends ExtraDirectives with Logging {
                         path("allchannels") {
                           complete(eclairApi.allChannels())
                         } ~
+                        path("networkstats") {
+                          complete(eclairApi.networkStats())
+                        } ~
                         path("allupdates") {
                           formFields(nodeIdFormParam.?) { nodeId_opt =>
                             complete(eclairApi.allUpdates(nodeId_opt))
@@ -225,9 +228,9 @@ trait Service extends ExtraDirectives with Logging {
                           }
                         } ~
                         path("sendtoroute") {
-                          formFields(amountMsatFormParam, paymentHashFormParam, "finalCltvExpiry".as[Int], "route".as[List[PublicKey]](pubkeyListUnmarshaller), "externalId".?) {
-                            (amountMsat, paymentHash, finalCltvExpiry, route, externalId_opt) =>
-                              complete(eclairApi.sendToRoute(externalId_opt, route, amountMsat, paymentHash, CltvExpiryDelta(finalCltvExpiry)))
+                          formFields(amountMsatFormParam, "recipientAmountMsat".as[MilliSatoshi].?, invoiceFormParam, "finalCltvExpiry".as[Int], "route".as[List[PublicKey]](pubkeyListUnmarshaller), "externalId".?, "parentId".as[UUID].?, "trampolineSecret".as[ByteVector32].?, "trampolineFeesMsat".as[MilliSatoshi].?, "trampolineCltvExpiry".as[Int].?, "trampolineNodes".as[List[PublicKey]](pubkeyListUnmarshaller).?) {
+                            (amountMsat, recipientAmountMsat_opt, invoice, finalCltvExpiry, route, externalId_opt, parentId_opt, trampolineSecret_opt, trampolineFeesMsat_opt, trampolineCltvExpiry_opt, trampolineNodes_opt) =>
+                              complete(eclairApi.sendToRoute(amountMsat, recipientAmountMsat_opt, externalId_opt, parentId_opt, invoice, CltvExpiryDelta(finalCltvExpiry), route, trampolineSecret_opt, trampolineFeesMsat_opt, trampolineCltvExpiry_opt.map(CltvExpiryDelta), trampolineNodes_opt.getOrElse(Nil)))
                           }
                         } ~
                         path("getsentinfo") {
@@ -279,6 +282,9 @@ trait Service extends ExtraDirectives with Logging {
                         } ~
                         path("usablebalances") {
                           complete(eclairApi.usableBalances())
+                        } ~
+                        path("getnewaddress") {
+                          complete(eclairApi.newAddress())
                         }
                     } ~ get {
                       path("ws") {

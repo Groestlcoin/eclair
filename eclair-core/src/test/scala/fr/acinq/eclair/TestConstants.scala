@@ -28,7 +28,7 @@ import fr.acinq.eclair.db._
 import fr.acinq.eclair.io.Peer
 import fr.acinq.eclair.router.RouterConf
 import fr.acinq.eclair.wire.{Color, EncodingType, NodeAddress}
-import scodec.bits.{ByteVector, HexStringSyntax}
+import scodec.bits.ByteVector
 
 import scala.concurrent.duration._
 
@@ -37,7 +37,7 @@ import scala.concurrent.duration._
  */
 object TestConstants {
 
-  val globalFeatures = hex"0200" // variable_length_onion
+  val defaultBlockHeight = 400000
   val fundingSatoshis = 1000000L sat
   val pushMsat = 200000000L msat
   val feeratePerKw = 10000L
@@ -66,12 +66,11 @@ object TestConstants {
     // This is a function, and not a val! When called will return a new NodeParams
     def nodeParams = NodeParams(
       keyManager = keyManager,
-      blockCount = new AtomicLong(400000),
+      blockCount = new AtomicLong(defaultBlockHeight),
       alias = "alice",
       color = Color(1, 2, 3),
       publicAddresses = NodeAddress.fromParts("localhost", 9731).get :: Nil,
-      globalFeatures = globalFeatures,
-      localFeatures = ByteVector.fromValidHex("088a"),
+      features = ByteVector.fromValidHex("0a8a"),
       overrideFeatures = Map.empty,
       syncWhitelist = Set.empty,
       dustLimit = 1100 sat,
@@ -106,6 +105,7 @@ object TestConstants {
       channelFlags = 1,
       watcherType = BITCOIND,
       paymentRequestExpiry = 1 hour,
+      multiPartPaymentExpiry = 30 seconds,
       minFundingSatoshis = 1000 sat,
       routerConf = RouterConf(
         randomizeRouteSelection = false,
@@ -126,7 +126,8 @@ object TestConstants {
         searchRatioChannelCapacity = 0.0
       ),
       socksProxy_opt = None,
-      maxPaymentAttempts = 5
+      maxPaymentAttempts = 5,
+      enableTrampolinePayment = true
     )
 
     def channelParams = Peer.makeChannelParams(
@@ -144,12 +145,11 @@ object TestConstants {
 
     def nodeParams = NodeParams(
       keyManager = keyManager,
-      blockCount = new AtomicLong(400000),
+      blockCount = new AtomicLong(defaultBlockHeight),
       alias = "bob",
       color = Color(4, 5, 6),
       publicAddresses = NodeAddress.fromParts("localhost", 9732).get :: Nil,
-      globalFeatures = globalFeatures,
-      localFeatures = ByteVector.empty, // no announcement
+      features = ByteVector.fromValidHex("0200"), // variable_length_onion, no announcement
       overrideFeatures = Map.empty,
       syncWhitelist = Set.empty,
       dustLimit = 1000 sat,
@@ -184,6 +184,7 @@ object TestConstants {
       channelFlags = 1,
       watcherType = BITCOIND,
       paymentRequestExpiry = 1 hour,
+      multiPartPaymentExpiry = 30 seconds,
       minFundingSatoshis = 1000 sat,
       routerConf = RouterConf(
         randomizeRouteSelection = false,
@@ -204,7 +205,8 @@ object TestConstants {
         searchRatioChannelCapacity = 0.0
       ),
       socksProxy_opt = None,
-      maxPaymentAttempts = 5
+      maxPaymentAttempts = 5,
+      enableTrampolinePayment = true
     )
 
     def channelParams = Peer.makeChannelParams(

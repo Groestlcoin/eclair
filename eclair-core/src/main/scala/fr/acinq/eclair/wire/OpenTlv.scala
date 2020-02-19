@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package fr.acinq.eclair.payment
+package fr.acinq.eclair.wire
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import fr.acinq.eclair.UInt64
+import fr.acinq.eclair.wire.CommonCodecs._
+import fr.acinq.eclair.wire.TlvCodecs.tlvStream
+import scodec.Codec
+import scodec.bits.ByteVector
+import scodec.codecs._
 
-/**
-  * Created by PM on 16/06/2016.
-  */
-class NoopPaymentHandler extends Actor with ActorLogging {
+sealed trait OpenTlv extends Tlv
 
-  override def receive: Receive = forward(context.system.deadLetters)
+object OpenTlv {
 
-  def forward(handler: ActorRef): Receive = {
-    case newHandler: ActorRef =>
-      log.info(s"registering actor $handler as payment handler")
-      context become forward(newHandler)
-    case msg => handler forward msg
-  }
+  case class Placeholder(b: ByteVector) extends OpenTlv
+
+  val openTlvCodec: Codec[TlvStream[OpenTlv]] = tlvStream(discriminated.by(varint)
+    .typecase(UInt64(65717), variableSizeBytesLong(varintoverflow, bytes).as[Placeholder])
+  )
 
 }

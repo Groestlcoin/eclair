@@ -94,7 +94,7 @@ class GUIUpdater(mainController: MainController) extends Actor with ActorLogging
       })
       context.become(main(m1))
 
-    case ShortChannelIdAssigned(channel, _, shortChannelId) if m.contains(channel) =>
+    case ShortChannelIdAssigned(channel, _, shortChannelId, _) if m.contains(channel) =>
       val channelPaneController = m(channel)
       runInGuiThread(() => channelPaneController.shortChannelId.setText(shortChannelId.toString))
 
@@ -210,8 +210,8 @@ class GUIUpdater(mainController: MainController) extends Actor with ActorLogging
       mainController.handlers.notification("Payment Failed", message, NOTIFICATION_ERROR)
 
     case p: PaymentSent =>
-      log.debug(s"payment sent with h=${p.paymentHash}, amount=${p.amount}, fees=${p.feesPaid}")
-      val message = CoinUtils.formatAmountInUnit(p.amount + p.feesPaid, FxApp.getUnit, withUnit = true)
+      log.debug(s"payment sent with h=${p.paymentHash}, amount=${p.recipientAmount}, fees=${p.feesPaid}")
+      val message = CoinUtils.formatAmountInUnit(p.amountWithFees, FxApp.getUnit, withUnit = true)
       mainController.handlers.notification("Payment Sent", message, NOTIFICATION_SUCCESS)
       runInGuiThread(() => mainController.paymentSentList.prepend(PaymentSentRecord(p, LocalDateTime.now())))
 

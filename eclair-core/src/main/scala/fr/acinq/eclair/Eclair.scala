@@ -24,15 +24,17 @@ import akka.util.Timeout
 import fr.acinq.bitcoin.Crypto.PublicKey
 import fr.acinq.bitcoin.{ByteVector32, Satoshi}
 import fr.acinq.eclair.TimestampQueryFilters._
+import fr.acinq.eclair.blockchain.bitcoind.BitcoinCoreWallet
 import fr.acinq.eclair.channel.Register.{Forward, ForwardShortId}
 import fr.acinq.eclair.channel._
 import fr.acinq.eclair.db.{IncomingPayment, NetworkFee, OutgoingPayment, Stats}
 import fr.acinq.eclair.io.Peer.{GetPeerInfo, PeerInfo}
 import fr.acinq.eclair.io.{NodeURI, Peer}
-import fr.acinq.eclair.payment.PaymentInitiator.SendPaymentRequest
-import fr.acinq.eclair.payment.PaymentLifecycle.ReceivePayment
 import fr.acinq.eclair.payment._
-import fr.acinq.eclair.router.{ChannelDesc, RouteRequest, RouteResponse, Router}
+import fr.acinq.eclair.payment.receive.MultiPartHandler.ReceivePayment
+import fr.acinq.eclair.payment.relay.Relayer.{GetOutgoingChannels, OutgoingChannels, UsableBalance}
+import fr.acinq.eclair.payment.send.PaymentInitiator.{SendPaymentRequest, SendPaymentToRouteRequest, SendPaymentToRouteResponse}
+import fr.acinq.eclair.router._
 import fr.acinq.eclair.wire.{ChannelAnnouncement, ChannelUpdate, NodeAddress, NodeAnnouncement}
 import scodec.bits.ByteVector
 
@@ -80,6 +82,8 @@ trait Eclair {
 
   def receive(description: String, amount_opt: Option[MilliSatoshi], expire_opt: Option[Long], fallbackAddress_opt: Option[String], paymentPreimage_opt: Option[ByteVector32])(implicit timeout: Timeout): Future[PaymentRequest]
 
+  def newAddress(): Future[String]
+
   def receivedInfo(paymentHash: ByteVector32)(implicit timeout: Timeout): Future[Option[IncomingPayment]]
 
   def send(externalId_opt: Option[String], recipientNodeId: PublicKey, amount: MilliSatoshi, paymentHash: ByteVector32, invoice_opt: Option[PaymentRequest] = None, maxAttempts_opt: Option[Int] = None, feeThresholdSat_opt: Option[Satoshi] = None, maxFeePct_opt: Option[Double] = None)(implicit timeout: Timeout): Future[UUID]
@@ -88,13 +92,15 @@ trait Eclair {
 
   def findRoute(targetNodeId: PublicKey, amount: MilliSatoshi, assistedRoutes: Seq[Seq[PaymentRequest.ExtraHop]] = Seq.empty)(implicit timeout: Timeout): Future[RouteResponse]
 
-  def sendToRoute(externalId_opt: Option[String], route: Seq[PublicKey], amount: MilliSatoshi, paymentHash: ByteVector32, finalCltvExpiryDelta: CltvExpiryDelta)(implicit timeout: Timeout): Future[UUID]
+  def sendToRoute(amount: MilliSatoshi, recipientAmount_opt: Option[MilliSatoshi], externalId_opt: Option[String], parentId_opt: Option[UUID], invoice: PaymentRequest, finalCltvExpiryDelta: CltvExpiryDelta, route: Seq[PublicKey], trampolineSecret_opt: Option[ByteVector32] = None, trampolineFees_opt: Option[MilliSatoshi] = None, trampolineExpiryDelta_opt: Option[CltvExpiryDelta] = None, trampolineNodes_opt: Seq[PublicKey] = Nil)(implicit timeout: Timeout): Future[SendPaymentToRouteResponse]
 
   def audit(from_opt: Option[Long], to_opt: Option[Long])(implicit timeout: Timeout): Future[AuditResponse]
 
   def networkFees(from_opt: Option[Long], to_opt: Option[Long])(implicit timeout: Timeout): Future[Seq[NetworkFee]]
 
   def channelStats()(implicit timeout: Timeout): Future[Seq[Stats]]
+
+  def networkStats()(implicit timeout: Timeout): Future[Option[NetworkStats]]
 
   def getInvoice(paymentHash: ByteVector32)(implicit timeout: Timeout): Future[Option[PaymentRequest]]
 
@@ -110,7 +116,7 @@ trait Eclair {
 
   def getInfoResponse()(implicit timeout: Timeout): Future[GetInfoResponse]
 
-  def usableBalances()(implicit timeout: Timeout): Future[Iterable[UsableBalances]]
+  def usableBalances()(implicit timeout: Timeout): Future[Iterable[UsableBalance]]
 }
 
 class EclairImpl(appKit: Kit) extends Eclair {
@@ -181,22 +187,46 @@ class EclairImpl(appKit: Kit) extends Eclair {
 
   override def allUpdates(nodeId_opt: Option[PublicKey])(implicit timeout: Timeout): Future[Iterable[ChannelUpdate]] = nodeId_opt match {
     case None => (appKit.router ? 'updates).mapTo[Iterable[ChannelUpdate]]
-    case Some(pk) => (appKit.router ? 'updatesMap).mapTo[Map[ChannelDesc, ChannelUpdate]].map(_.filter(e => e._1.a == pk || e._1.b == pk).values)
+    case Some(pk) => (appKit.router ? 'channelsMap).mapTo[Map[ShortChannelId, PublicChannel]].map { channels =>
+      channels.values.flatMap {
+        case PublicChannel(ann, _, _, Some(u1), _) if ann.nodeId1 == pk && u1.isNode1 => List(u1)
+        case PublicChannel(ann, _, _, _, Some(u2)) if ann.nodeId2 == pk && !u2.isNode1 => List(u2)
+        case PublicChannel(_, _, _, _, _) => List.empty
+      }
+    }
   }
 
   override def receive(description: String, amount_opt: Option[MilliSatoshi], expire_opt: Option[Long], fallbackAddress_opt: Option[String], paymentPreimage_opt: Option[ByteVector32])(implicit timeout: Timeout): Future[PaymentRequest] = {
     fallbackAddress_opt.map { fa => fr.acinq.eclair.addressToPublicKeyScript(fa, appKit.nodeParams.chainHash) } // if it's not a bitcoin address throws an exception
-    (appKit.paymentHandler ? ReceivePayment(description = description, amount_opt = amount_opt, expirySeconds_opt = expire_opt, fallbackAddress = fallbackAddress_opt, paymentPreimage = paymentPreimage_opt)).mapTo[PaymentRequest]
+    (appKit.paymentHandler ? ReceivePayment(amount_opt, description, expire_opt, fallbackAddress = fallbackAddress_opt, paymentPreimage = paymentPreimage_opt)).mapTo[PaymentRequest]
+  }
+
+  override def newAddress(): Future[String] = {
+    appKit.wallet match {
+      case w: BitcoinCoreWallet => w.getFinalAddress
+      case _ => Future.failed(new IllegalArgumentException("this call is only available with a bitcoin core backend"))
+    }
   }
 
   override def findRoute(targetNodeId: PublicKey, amount: MilliSatoshi, assistedRoutes: Seq[Seq[PaymentRequest.ExtraHop]] = Seq.empty)(implicit timeout: Timeout): Future[RouteResponse] = {
     (appKit.router ? RouteRequest(appKit.nodeParams.nodeId, targetNodeId, amount, assistedRoutes)).mapTo[RouteResponse]
   }
 
-  override def sendToRoute(externalId_opt: Option[String], route: Seq[PublicKey], amount: MilliSatoshi, paymentHash: ByteVector32, finalCltvExpiryDelta: CltvExpiryDelta)(implicit timeout: Timeout): Future[UUID] = {
-    externalId_opt match {
-      case Some(externalId) if externalId.length > externalIdMaxLength => Future.failed(new IllegalArgumentException("externalId is too long: cannot exceed 66 characters"))
-      case _ => (appKit.paymentInitiator ? SendPaymentRequest(amount, paymentHash, route.last, 1, finalCltvExpiryDelta, None, externalId_opt, route)).mapTo[UUID]
+  override def sendToRoute(amount: MilliSatoshi, recipientAmount_opt: Option[MilliSatoshi], externalId_opt: Option[String], parentId_opt: Option[UUID], invoice: PaymentRequest, finalCltvExpiryDelta: CltvExpiryDelta, route: Seq[PublicKey], trampolineSecret_opt: Option[ByteVector32], trampolineFees_opt: Option[MilliSatoshi], trampolineExpiryDelta_opt: Option[CltvExpiryDelta], trampolineNodes_opt: Seq[PublicKey])(implicit timeout: Timeout): Future[SendPaymentToRouteResponse] = {
+    val recipientAmount = recipientAmount_opt.getOrElse(invoice.amount.getOrElse(amount))
+    val sendPayment = SendPaymentToRouteRequest(amount, recipientAmount, externalId_opt, parentId_opt, invoice, finalCltvExpiryDelta, route, trampolineSecret_opt, trampolineFees_opt.getOrElse(0 msat), trampolineExpiryDelta_opt.getOrElse(CltvExpiryDelta(0)), trampolineNodes_opt)
+    if (invoice.isExpired) {
+      Future.failed(new IllegalArgumentException("invoice has expired"))
+    } else if (route.isEmpty) {
+      Future.failed(new IllegalArgumentException("missing payment route"))
+    } else if (externalId_opt.exists(_.length > externalIdMaxLength)) {
+      Future.failed(new IllegalArgumentException(s"externalId is too long: cannot exceed $externalIdMaxLength characters"))
+    } else if (trampolineNodes_opt.nonEmpty && (trampolineFees_opt.isEmpty || trampolineExpiryDelta_opt.isEmpty)) {
+      Future.failed(new IllegalArgumentException("trampoline payments must specify a trampoline fee and cltv delta"))
+    } else if (trampolineNodes_opt.nonEmpty && trampolineNodes_opt.length != 2) {
+      Future.failed(new IllegalArgumentException("trampoline payments currently only support paying a trampoline node via a single other trampoline node"))
+    } else {
+      (appKit.paymentInitiator ? sendPayment).mapTo[SendPaymentToRouteResponse]
     }
   }
 
@@ -209,7 +239,7 @@ class EclairImpl(appKit: Kit) extends Eclair {
     )
 
     externalId_opt match {
-      case Some(externalId) if externalId.length > externalIdMaxLength => Future.failed(new IllegalArgumentException("externalId is too long: cannot exceed 66 characters"))
+      case Some(externalId) if externalId.length > externalIdMaxLength => Future.failed(new IllegalArgumentException(s"externalId is too long: cannot exceed $externalIdMaxLength characters"))
       case _ => invoice_opt match {
         case Some(invoice) if invoice.isExpired => Future.failed(new IllegalArgumentException("invoice has expired"))
         case Some(invoice) =>
@@ -227,7 +257,7 @@ class EclairImpl(appKit: Kit) extends Eclair {
 
   override def sentInfo(id: Either[UUID, ByteVector32])(implicit timeout: Timeout): Future[Seq[OutgoingPayment]] = Future {
     id match {
-      case Left(uuid) => appKit.nodeParams.db.payments.getOutgoingPayment(uuid).toSeq
+      case Left(uuid) => appKit.nodeParams.db.payments.listOutgoingPayments(uuid)
       case Right(paymentHash) => appKit.nodeParams.db.payments.listOutgoingPayments(paymentHash)
     }
   }
@@ -253,6 +283,8 @@ class EclairImpl(appKit: Kit) extends Eclair {
   }
 
   override def channelStats()(implicit timeout: Timeout): Future[Seq[Stats]] = Future(appKit.nodeParams.db.audit.stats)
+
+  override def networkStats()(implicit timeout: Timeout): Future[Option[NetworkStats]] = (appKit.router ? GetNetworkStats).mapTo[Option[NetworkStats]]
 
   override def allInvoices(from_opt: Option[Long], to_opt: Option[Long])(implicit timeout: Timeout): Future[Seq[PaymentRequest]] = Future {
     val filter = getDefaultTimestampFilters(from_opt, to_opt)
@@ -288,5 +320,6 @@ class EclairImpl(appKit: Kit) extends Eclair {
       publicAddresses = appKit.nodeParams.publicAddresses)
   )
 
-  override def usableBalances()(implicit timeout: Timeout): Future[Iterable[UsableBalances]] = (appKit.relayer ? GetUsableBalances).mapTo[Iterable[UsableBalances]]
+  override def usableBalances()(implicit timeout: Timeout): Future[Iterable[UsableBalance]] =
+    (appKit.relayer ? GetOutgoingChannels()).mapTo[OutgoingChannels].map(_.channels.map(_.toUsableBalance))
 }

@@ -47,25 +47,54 @@ class Auditor(nodeParams: NodeParams) extends Actor with ActorLogging {
       Kamon
         .histogram("payment.hist")
         .withTag("direction", "sent")
-        .record(e.amount.truncateToSatoshi.toLong)
+        .withTag("type", "amount")
+        .record(e.recipientAmount.truncateToSatoshi.toLong)
+      Kamon
+        .histogram("payment.hist")
+        .withTag("direction", "sent")
+        .withTag("type", "fee")
+        .record(e.feesPaid.truncateToSatoshi.toLong)
+      Kamon
+        .histogram("payment.hist")
+        .withTag("direction", "sent")
+        .withTag("type", "parts")
+        .record(e.parts.length)
       db.add(e)
+
+    case _: PaymentFailed =>
+      Kamon
+        .counter("payment.failures.count")
+        .withTag("direction", "sent")
+        .increment()
 
     case e: PaymentReceived =>
       Kamon
         .histogram("payment.hist")
         .withTag("direction", "received")
+        .withTag("type", "amount")
         .record(e.amount.truncateToSatoshi.toLong)
+      Kamon
+        .histogram("payment.hist")
+        .withTag("direction", "received")
+        .withTag("type", "parts")
+        .record(e.parts.length)
       db.add(e)
 
     case e: PaymentRelayed =>
+      val relayType = e match {
+        case _: ChannelPaymentRelayed => "channel"
+        case _: TrampolinePaymentRelayed => "trampoline"
+      }
       Kamon
         .histogram("payment.hist")
         .withTag("direction", "relayed")
+        .withTag("relay", relayType)
         .withTag("type", "total")
         .record(e.amountIn.truncateToSatoshi.toLong)
       Kamon
         .histogram("payment.hist")
         .withTag("direction", "relayed")
+        .withTag("relay", relayType)
         .withTag("type", "fee")
         .record((e.amountIn - e.amountOut).truncateToSatoshi.toLong)
       db.add(e)

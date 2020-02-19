@@ -50,6 +50,7 @@ You will find detailed guides and frequently asked questions there.
 Eclair needs a _synchronized_, _segwit-ready_, **_zeromq-enabled_**, _wallet-enabled_, _non-pruning_, _tx-indexing_ [Groestlcoin Core](https://github.com/groestlcoin/groestlcoin) node.
 Eclair will use any GRS it finds in the Groestlcoin Core wallet to fund any channels you choose to open. Eclair will return GRS from closed channels to this wallet.
 You can configure your Groestlcoin Node to use either `p2sh-segwit` addresses or `bech32` addresses, Eclair is compatible with both modes.
+If your Groestlcoin Core wallet has "non-segwit UTXOs" (outputs that are neither `p2sh-segwit` or `bech32`), you must send them to a `p2sh-segwit` or `bech32` address.
 
 Run groestlcoind with the following minimal `groestlcoin.conf`:
 ```
